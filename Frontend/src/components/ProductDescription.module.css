@@ -1,0 +1,530 @@
+/* ProductDescription.module.css - Complete with Dark Mode */
+
+:root {
+  /* Light Mode */
+  --primary-bg: #f7f7f7;
+  --secondary-bg: white;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --accent-color: #2196F3;
+  --border-color: #e0e0e0;
+  --success-color: #2ecc71;
+  --error-color: #e74c3c;
+  --neutral-color: #6c757d;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-bg: #f8f9fa;
+  --active-bg: #e6e6e6;
+  --btn-text: white;
+  --btn-gradient-start: #2196F3;
+  --btn-gradient-end: #3F51B5;
+  --like-btn-bg: #f0f9f4;
+  --like-btn-color: #2ecc71;
+  --dislike-btn-bg: #fff1f1;
+  --dislike-btn-color: #e74c3c;
+}
+
+/* Dark Mode Theme Variables */
+[data-theme="dark"] {
+  --primary-bg: #121212;
+  --secondary-bg: #1e1e1e;
+  --text-primary: #f5f5f5;
+  --text-secondary: #cccccc;
+  --accent-color: #0a84ff;
+  --border-color: #333333;
+  --success-color: #34c759;
+  --error-color: #ff3b30;
+  --neutral-color: #6c757d;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --hover-bg: #2c2c2c;
+  --active-bg: #3a3a3a;
+  --btn-text: #f5f5f5;
+  --btn-gradient-start: #0a84ff;
+  --btn-gradient-end: #5e81ff;
+  --like-btn-bg: #132e1c;
+  --like-btn-color: #34c759;
+  --dislike-btn-bg: #2e1215;
+  --dislike-btn-color: #ff3b30;
+}
+
+/* Container and Layout */
+.productContainer {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--primary-bg);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  transition: border-color 0.3s ease;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Image Gallery Section */
+.imageSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.productImageContainer {
+  width: 100%;
+  background: var(--secondary-bg);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.productImage {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+
+.productImage:hover {
+  transform: scale(1.05);
+}
+
+.gallery {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.galleryItem {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+  background: var(--secondary-bg);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.galleryItem:hover {
+  transform: scale(1.05);
+}
+
+.galleryItem.active {
+  border-color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.galleryThumb {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.noImage {
+  width: 100%;
+  height: 300px;
+  background: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Details Section */
+.detailsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.priceInfo {
+  background: var(--secondary-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.priceBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.salePrice {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--success-color);
+  transition: color 0.3s ease;
+}
+
+.originalPrice {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+  transition: color 0.3s ease;
+}
+
+.discount {
+  background: var(--error-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.storeInfo {
+  margin: 1.5rem 0;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.btnBuy {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(45deg, var(--btn-gradient-start), var(--btn-gradient-end));
+  color: var(--btn-text);
+  text-align: center;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 1.5rem 0;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btnBuy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--shadow-color);
+}
+
+/* Interactive Buttons */
+/* Updated Interactive Buttons */
+/* Interactive Buttons - Improved Layout */
+.ratingButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.heartButton,
+.likeButton,
+.dislikeButton,
+.shareButton {
+  height: 40px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--secondary-bg);
+  color: var(--text-primary);
+  display: inline-flex; /* Changed to inline-flex - behaves like inline-block but with flex alignment */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  will-change: transform, background-color;
+  min-width: 90px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  vertical-align: middle; /* Ensures proper vertical alignment */
+  text-align: center; /* Center text horizontally */
+  margin-right: 0.6rem; /* Add gap between buttons when used outside flex container */
+  margin-bottom: 0.6rem; 
+}
+
+/* Icon and text alignment */
+.heartButton i,
+.likeButton i,
+.dislikeButton i,
+.shareButton i {
+  font-size: 1.2rem;
+  margin-right: 0.3rem;
+  
+}
+
+.heartButton span,
+.likeButton span,
+.dislikeButton span,
+.shareButton span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Button specific styling */
+.heartButton {
+  color: var(--error-color);
+  border-color: rgba(231, 76, 60, 0.3);
+}
+
+.heartButton.empty {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.likeButton {
+  background-color: var(--like-btn-bg);
+  color: var(--like-btn-color);
+  border-color: rgba(46, 204, 113, 0.3);
+}
+
+.dislikeButton {
+  background-color: var(--dislike-btn-bg);
+  color: var(--dislike-btn-color);
+  border-color: rgba(231, 76, 60, 0.3);
+}
+
+.shareButton {
+  background-color: var(--secondary-bg);
+  color: var(--neutral-color);
+  border-color: var(--neutral-color);
+}
+
+/* Hover and active states */
+.heartButton:hover,
+.likeButton:hover,
+.dislikeButton:hover,
+.shareButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.heartButton:active,
+.likeButton:active,
+.dislikeButton:active,
+.shareButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.heartButton.active,
+.likeButton.active,
+.dislikeButton.active,
+.shareButton.active {
+  background-color: var(--active-bg);
+  font-weight: 600;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .ratingButtons {
+    justify-content: space-between;
+  }
+  
+  .heartButton,
+  .likeButton,
+  .dislikeButton,
+  .shareButton {
+    flex: 1 0 calc(50% - 0.4rem);
+    margin-bottom: 0.8rem;
+    min-width: 0;
+  }
+}
+
+/* Specifically for price info section */
+.priceInfo .ratingButtons {
+  margin-top: 1.5rem;
+}
+
+.priceInfo .heartButton,
+.priceInfo .shareButton,
+.priceInfo .likeButton,
+.priceInfo .dislikeButton {
+  height: 36px;
+  padding: 0.5rem 0.8rem;
+}
+/* Description Section */
+.descriptionSection {
+  margin-top: 1rem;
+  padding: 2rem;
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.descriptionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.descriptionText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+/* Loading and Error States */
+.loadingScreen {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-bg);
+  transition: background-color 0.3s ease;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transition: border-color 0.3s ease;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorScreen {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-bg);
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.errorTitle {
+  font-size: 2rem;
+  color: var(--error-color);
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.errorText {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+/* Buttons */
+.btnPrimary {
+  padding: 0.8rem 1.5rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.btnBack {
+  padding: 0.8rem 1.5rem;
+  background: var(--text-primary);
+  color: var(--secondary-bg);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s, background-color 0.3s ease, color 0.3s ease;
+}
+
+.btnBack:hover {
+  transform: translateY(-2px);
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 992px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+  }
+  
+  .imageSection {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .productContainer {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .ratingButtons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .priceBlock {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .btnBuy {
+    padding: 0.8rem;
+  }
+}

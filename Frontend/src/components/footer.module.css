@@ -1,0 +1,210 @@
+/* footer.css */
+
+.footer {
+ 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background-color 0.3s ease;
+  
+  }
+  
+  /* Light mode styling */
+  :global([data-theme="light"]) .footer {
+    background-color: rgba(249, 249, 249, 0.8);
+    color: #333;
+  }
+  
+  /* Dark mode styling */
+  :global([data-theme="dark"]) .footer {
+    background-color: rgba(18, 18, 18, 0.85);
+    color: #f0f0f0;
+
+  }
+  
+  .footerContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px 20px;
+  }
+  
+  .footerGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .footerSection h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Light mode section heading styling */
+  :global([data-theme="light"]) .footerSection h3 {
+    color: #222;
+  }
+  
+  /* Dark mode section heading styling */
+  :global([data-theme="dark"]) .footerSection h3 {
+    color: #f5f5f5;
+  }
+  
+  .footerSection h3:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Light mode section heading underline */
+  :global([data-theme="light"]) .footerSection h3:after {
+    background-color: #2196f3;
+  }
+  
+  /* Dark mode section heading underline */
+  :global([data-theme="dark"]) .footerSection h3:after {
+    background-color: #0a84ff;
+  }
+  
+  .footerLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .footerLinks a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.2s ease;
+    width: fit-content;
+  }
+  
+  /* Light mode link styling */
+  :global([data-theme="light"]) .footerLinks a {
+    color: #555;
+  }
+  
+  :global([data-theme="light"]) .footerLinks a:hover {
+    color: #2196f3;
+  }
+  
+  /* Dark mode link styling */
+  :global([data-theme="dark"]) .footerLinks a {
+    color: #ccc;
+  }
+  
+  :global([data-theme="dark"]) .footerLinks a:hover {
+    color: #0a84ff;
+  }
+  
+  .footerBottom {
+    padding-top: 20px;
+    border-top: 1px solid;
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Light mode bottom border */
+  :global([data-theme="light"]) .footerBottom {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dark mode bottom border */
+  :global([data-theme="dark"]) .footerBottom {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .footerBottomContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .copyright {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+  
+  .footerBottomLinks {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .footerBottomLinks a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s ease;
+  }
+  
+  /* Light mode bottom link styling */
+  :global([data-theme="light"]) .footerBottomLinks a {
+    color: #555;
+  }
+  
+  :global([data-theme="light"]) .footerBottomLinks a:hover {
+    color: #2196f3;
+  }
+  
+  /* Dark mode bottom link styling */
+  :global([data-theme="dark"]) .footerBottomLinks a {
+    color: #ccc;
+  }
+  
+  :global([data-theme="dark"]) .footerBottomLinks a:hover {
+    color: #0a84ff;
+  }
+  
+  .separator {
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .footerGrid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px 40px;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .footerGrid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .footerBottomContent {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .footerContainer {
+      padding: 30px 20px 20px;
+    }
+  }
+  
+  /* Animation for footer parallax effect on scroll */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .footer.visible {
+    animation: fadeInUp 0.5s forwards;
+  }
