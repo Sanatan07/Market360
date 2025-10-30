@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: market360-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./Backend/.env
+    restart: always
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: market360-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    env_file:
+      - ./Frontend/.env
+    restart: always
