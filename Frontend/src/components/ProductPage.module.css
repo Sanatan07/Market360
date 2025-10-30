@@ -1,0 +1,966 @@
+/* ProductPage.module.css - Modern Glass UI */
+
+:root {
+  /* Light Mode */
+  --primary-bg: rgba(249, 249, 249, 0.7);
+  --secondary-bg: rgba(255, 255, 255, 0.8);
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --accent-color: #007aff;
+  --border-color: rgba(224, 224, 224, 0.5);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --pattern-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.05) 75%, transparent 75%, transparent);
+  --blur-radius: 10px;
+  --card-radius: 16px;
+  --transition-speed: 0.3s;
+  --glow: 0 0 15px rgba(0, 122, 255, 0.5);
+  --dark-card-bg: rgba(30, 30, 30, 0.8);
+
+  /* Dark Mode */
+  --dark-primary-bg: rgba(12, 12, 12, 0.95);
+  --dark-secondary-bg: rgba(24, 24, 24, 0.8);
+  --dark-text-primary: #f5f5f5;
+  --dark-text-secondary: #cccccc;
+  --dark-accent-color: #0a84ff;
+  --dark-border-color: rgba(51, 51, 51, 0.5);
+  --dark-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --dark-pattern-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 75%, transparent);
+  --dark-glow: 0 0 15px rgba(10, 132, 255, 0.5);
+  
+  /* New accent colors for variety */
+  --success-color: #34c759;
+  --warning-color: #ff9500;
+  --error-color: #ff3b30;
+  --info-color: #5ac8fa;
+}
+
+/* Theme switch - improved dark mode implementation */
+[data-theme="dark"] {
+  --primary-bg: var(--dark-primary-bg);
+  --secondary-bg: var(--dark-secondary-bg);
+  --text-primary: var(--dark-text-primary);
+  --text-secondary: var(--dark-text-secondary);
+  --accent-color: var(--dark-accent-color);
+  --border-color: var(--dark-border-color);
+  --shadow: var(--dark-shadow);
+  --pattern-bg: var(--dark-pattern-bg);
+  --glow: var(--dark-glow);
+}
+
+/* Font optimization with system font fallbacks */
+@font-face {
+  font-family: 'SF Pro';
+  src: url('../assets/SF-Pro.ttf') format('truetype');
+  font-display: swap; /* Prevents FOIT (Flash of Invisible Text) */
+}
+
+/* Base styles with better performance optimizations */
+body {
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-image: var(--pattern-bg);
+  background-size: 20px 20px;
+  background-color: var(--primary-bg);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.5s ease;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--dark-primary-bg);
+  background-image: none;
+}
+
+/* Container with improved backdrop filter performance */
+.container {
+  max-width: 2000px;
+
+  padding: 2rem;
+  background: var(--primary-bg);
+
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  border: 1px solid var(--border-color);
+  transition: all 0.5s ease;
+}
+
+[data-theme="dark"] .container {
+  background: var(--dark-primary-bg);
+  box-shadow: none;
+  border: none;
+}
+
+.contentWrapper {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Enhanced filter sidebar with improved animation */
+.filterSidebar {
+  flex: 1;
+  background: var(--secondary-bg);
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  border: 1px solid var(--border-color);
+  max-height: fit-content;
+  max-width: fit-content;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .filterSidebar {
+  background: var(--dark-card-bg);
+  border: 1px solid var(--dark-border-color);
+  box-shadow: var(--dark-shadow);
+}
+
+.filterSidebar:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow), var(--glow);
+}
+
+.filterSidebar h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Filter control groups */
+.filterGroup {
+  margin-bottom: 1.5rem;
+}
+
+.filterGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Switch toggle with animation */
+.switch {
+  margin-left: 40px;
+}
+
+.productsGrid {
+  flex: 4;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  /* Using the CSS Grid auto-placement algorithm efficiently */
+  grid-auto-flow: dense;
+}
+
+/* Product card with optimized transitions and animations */
+.productCard {
+  position: relative;
+  background: var(--secondary-bg);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              box-shadow 0.4s ease,
+              border-color 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+[data-theme="dark"] .productCard {
+  background: var(--dark-card-bg);
+  border: 1px solid var(--dark-border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.productCard:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .productCard:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  border-color: var(--dark-accent-color);
+}
+
+.productImage {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  background: var(--secondary-bg);
+}
+
+[data-theme="dark"] .productImage {
+  background: var(--dark-card-bg);
+}
+
+.productImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, filter 0.5s ease;
+  will-change: transform, filter;
+}
+
+.productCard:hover .productImage img {
+  transform: scale(1.05);
+  filter: blur(3px) brightness(0.8);
+}
+
+/* Enhanced button styles and interactions */
+.heartButton,
+.shareButton {
+  position: absolute;
+  z-index: 10;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.9;
+  cursor: pointer;
+  transform: translateZ(0); /* Triggers GPU acceleration */
+}
+
+.heartButton {
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .heartButton {
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.shareButton {
+  top: 1rem;
+  right: 4rem;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .shareButton {
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.heartButton:hover,
+.shareButton:hover {
+  transform: scale(1.15);
+  opacity: 1;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.heartButton svg,
+.shareButton svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: var(--text-secondary);
+  transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.heartButton:hover svg,
+.shareButton:hover svg {
+  fill: var(--accent-color);
+  transform: scale(1.1);
+}
+
+.heartButton.active svg {
+  fill: var(--error-color);
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.3); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.3); }
+  70% { transform: scale(1); }
+}
+
+/* Product info with improved layout */
+.productInfo {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--secondary-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .productInfo {
+  background: var(--dark-card-bg);
+  border-top: 1px solid var(--dark-border-color);
+}
+
+.productInfo h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.8rem 0;
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.4;
+  height: 3rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Enhanced pricing display with better visual hierarchy */
+.priceInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.5rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.salePrice {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+[data-theme="dark"] .salePrice {
+  color: var(--dark-accent-color);
+}
+
+.listPrice {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.discount {
+  background: linear-gradient(135deg, var(--error-color), var(--warning-color));
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.3);
+}
+
+.store {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.store svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+
+/* Action buttons with improved interaction design */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: auto;
+  position: relative;
+}
+
+.viewDetailsButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--accent-color);
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .viewDetailsButton {
+  background: var(--dark-accent-color);
+  box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
+}
+
+.productCard:hover .viewDetailsButton {
+  opacity: 1;
+  transform: translate(-50%, -500%) scale(1);
+}
+
+.viewDetailsButton:hover {
+  background: linear-gradient(135deg, var(--accent-color), var(--info-color));
+  box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+[data-theme="dark"] .viewDetailsButton:hover {
+  background: linear-gradient(135deg, #0a84ff, #5ac8fa);
+  box-shadow: 0 6px 20px rgba(10, 132, 255, 0.4);
+}
+
+.dealLink {
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .dealLink {
+  border: 1px solid var(--dark-border-color);
+}
+
+.dealLink:hover {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+}
+
+[data-theme="dark"] .dealLink:hover {
+  background: var(--dark-accent-color);
+  border-color: var(--dark-accent-color);
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.2);
+}
+
+.ratingButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+}
+
+.likeButton,
+.dislikeButton {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  color: var(--text-secondary);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex: 1;
+  margin: 0 0.3rem;
+  font-size: 0.9rem;
+}
+
+[data-theme="dark"] .likeButton,
+[data-theme="dark"] .dislikeButton {
+  border: 1px solid var(--dark-border-color);
+}
+
+.likeButton:hover,
+.dislikeButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.likeButton.active {
+  background: linear-gradient(135deg, var(--success-color), #30b0c7);
+  border-color: var(--success-color);
+  color: white;
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+  animation: pulse 0.5s ease-in-out;
+}
+
+.dislikeButton.active {
+  background: linear-gradient(135deg, var(--error-color), var(--warning-color));
+  border-color: var(--error-color);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Enhanced modal with better accessibility and transitions */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  will-change: opacity;
+}
+
+.modal {
+  background: var(--secondary-bg);
+  width: 90%;
+  max-width: 600px;
+  padding: 2.5rem;
+  border-radius: var(--card-radius);
+  position: relative;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  animation: slideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+[data-theme="dark"] .modal {
+  background: var(--dark-card-bg);
+  border: 1px solid var(--dark-border-color);
+  box-shadow: var(--dark-shadow);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .modal h2 {
+  border-bottom: 1px solid var(--dark-border-color);
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, var(--accent-color), var(--info-color));
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+}
+
+[data-theme="dark"] .submitButton {
+  background: linear-gradient(135deg, #0a84ff, #5ac8fa);
+  box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
+}
+
+.submitButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+}
+
+.submitButton:active {
+  transform: translateY(-1px);
+}
+
+.cancelButton {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 0.7rem 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .cancelButton {
+  border: 1px solid var(--dark-border-color);
+}
+
+.cancelButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .cancelButton:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.imageUploadSection {
+  margin: 1.5rem 0;
+  border: 1px dashed var(--border-color);
+  padding: 1.5rem;
+  border-radius: var(--card-radius);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .imageUploadSection {
+  border: 1px dashed var(--dark-border-color);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.imagesPreviewContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.imagePreviewItem {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] .imagePreviewItem {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.imagePreviewItem:hover {
+  transform: scale(1.05);
+}
+
+.previewContainer {
+  height: 100%;
+  overflow: hidden;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.imagePreviewItem:hover .imagePreview {
+  transform: scale(1.1);
+}
+
+.removeImage {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+}
+
+.imagePreviewItem:hover .removeImage {
+  opacity: 1;
+}
+
+.removeImage:hover {
+  background: var(--error-color);
+  transform: scale(1.1);
+}
+
+.uploadContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadLabel {
+  display: inline-block;
+  padding: 0.7rem 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(90, 200, 250, 0.1));
+  color: var(--accent-color);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px dashed var(--accent-color);
+  font-weight: 500;
+}
+
+[data-theme="dark"] .uploadLabel {
+  background: linear-gradient(135deg, rgba(10, 132, 255, 0.1), rgba(90, 200, 250, 0.1));
+  color: var(--dark-accent-color);
+  border: 1px dashed var(--dark-accent-color);
+}
+
+.uploadLabel:hover {
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.2), rgba(90, 200, 250, 0.2));
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 122, 255, 0.15);
+}
+
+[data-theme="dark"] .uploadLabel:hover {
+  background: linear-gradient(135deg, rgba(10, 132, 255, 0.2), rgba(90, 200, 250, 0.2));
+  box-shadow: 0 4px 15px rgba(10, 132, 255, 0.15);
+}
+
+/* Styling for inputs and form elements */
+input, select, textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+}
+
+[data-theme="dark"] input, 
+[data-theme="dark"] select, 
+[data-theme="dark"] textarea {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--dark-border-color);
+  color: var(--dark-text-primary);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] input:focus, 
+[data-theme="dark"] select:focus, 
+[data-theme="dark"] textarea:focus {
+  border-color: var(--dark-accent-color);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Form field groups */
+.formGroup {
+  margin-bottom: 1.2rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.formGroup .hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.3rem;
+}
+
+/* Enhanced scrollbar styling for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-accent-color);
+}
+
+/* Theme toggle button styling */
+button:has(svg[class*="FaLightbulb"]) {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  background: var(--secondary-bg);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(var(--blur-radius));
+  -webkit-backdrop-filter: blur(var(--blur-radius));
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] button:has(svg[class*="FaLightbulb"]) {
+  background: var(--dark-card-bg);
+  border: 1px solid var(--dark-border-color);
+  box-shadow: var(--dark-shadow);
+}
+
+button:has(svg[class*="FaLightbulb"]):hover {
+  transform: rotate(15deg) scale(1.1);
+  box-shadow: var(--shadow), var(--glow);
+}
+
+[data-theme="dark"] button:has(svg[class*="FaLightbulb"]):hover {
+  box-shadow: var(--dark-shadow), var(--dark-glow);
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .contentWrapper {
+    flex-direction: column;
+  }
+
+  .filterSidebar {
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  
+  .contentWrapper {
+    padding: 1rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .modal {
+    padding: 1.5rem;
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .heartButton {
+    right: 1rem;
+  }
+  
+  .shareButton {
+    right: 4rem;
+  }
+}
+
+/* Animations for card elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.productCard {
+  animation: fadeInUp 0.5s ease-out forwards;
+  animation-delay: calc(var(--index, 0) * 0.1s);
+}
+
+/* Hover glow effect */
+.productCard:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(0, 122, 255, 0.2);
+}
+
+/* Additional glassmorphism effects */
+.productCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.productCard:hover::before {
+  opacity: 1;
+}

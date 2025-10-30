@@ -1,0 +1,74 @@
+/* Add these custom styles to your Bootstrap CSS */
+
+.card {
+    border-radius: 8px;
+    border-color: #ddd;
+  }
+  
+  .card-header {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .btn-warning {
+    background-color: #FFD814;
+    border-color: #FCD200;
+    color: #000;
+  }
+  
+  .btn-warning:hover {
+    background-color: #F7CA00;
+    border-color: #F2C200;
+    color: #000;
+  }
+  
+  .btn-light {
+    border-color: #ddd;
+  }
+  
+  .text-primary {
+    color: #007185 !important;
+  }
+  
+  .text-primary:hover {
+    color: #C7511F !important;
+    text-decoration: underline !important;
+  }
+  
+  .badge.bg-danger {
+    background-color: #CC0C39 !important;
+  }
+  
+  .text-danger {
+    color: #CC0C39 !important;
+  }
+  
+  /* Quantity selector styles */
+  .quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .quantity-selector button {
+    border: none;
+    background: none;
+    padding: 4px 8px;
+  }
+  
+  .quantity-selector span {
+    padding: 0 12px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+  
+  /* Product link styles */
+  .product-link {
+    color: #0F1111;
+    text-decoration: none;
+  }
+  
+  .product-link:hover {
+    color: #C7511F;
+    text-decoration: none;
+  }

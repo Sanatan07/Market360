@@ -1,0 +1,160 @@
+/* ProductFilter.module.css */
+
+:root {
+  /* Light Mode Variables */
+  --filter-bg: #ffffff;
+  --border-color: #ddd;
+  --text-color: #333;
+  --input-bg: #ffffff;
+  --input-border: #ccc;
+  --range-track: #ddd;
+  --range-thumb: #007185;
+  --accent-color: #007bff;
+  --reset-btn-bg: #ccc;
+  --reset-btn-hover: #b3b3b3;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* Dark Mode Variables */
+  --dark-filter-bg: #181818;
+  --dark-border-color: #333333;
+  --dark-text-color: #cccccc;
+  --dark-input-bg: #222222;
+  --dark-input-border: #555555;
+  --dark-range-track: #444444;
+  --dark-range-thumb: #007185;
+  --dark-accent-color: #007bff;
+  --dark-reset-btn-bg: #555555;
+  --dark-reset-btn-hover: #777777;
+  --dark-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] {
+  --filter-bg: var(--dark-filter-bg);
+  --border-color: var(--dark-border-color);
+  --text-color: var(--dark-text-color);
+  --input-bg: var(--dark-input-bg);
+  --input-border: var(--dark-input-border);
+  --range-track: var(--dark-range-track);
+  --range-thumb: var(--dark-range-thumb);
+  --accent-color: var(--dark-accent-color);
+  --reset-btn-bg: var(--dark-reset-btn-bg);
+  --reset-btn-hover: var(--dark-reset-btn-hover);
+  --shadow: var(--dark-shadow);
+}
+
+.productFilter {
+  width: 100%;
+  max-width: 300px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--filter-bg);
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+.filterSection {
+  margin-bottom: 16px;
+}
+
+.filterSection h2 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.rangeSlider {
+  margin: 12px 0;
+}
+
+.rangeTrack {
+  height: 6px;
+  background: var(--range-track);
+  border-radius: 3px;
+}
+
+.rangeThumb {
+  height: 16px;
+  width: 16px;
+  background: var(--range-thumb);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.priceInputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.priceInput {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  text-align: center;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  transition: border-color 0.2s ease;
+}
+
+.priceInput:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.categoryCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent-color);
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.apply {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.apply:hover {
+  background-color: #28a745;
+}
+
+.reset {
+  background-color: var(--reset-btn-bg);
+  color: var(--text-color);
+}
+
+.reset:hover {
+  background-color: var(--reset-btn-hover);
+}
