@@ -3,52 +3,47 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const { auth } = require('./middleware/auth');
 
 // Load env vars
 dotenv.config();
 
 // Connect to database
 connectDB();
-async function initializeAdminUser() {
-  try {
-    const adminEmail = 'admin@example.com';
-    const adminPassword = 'adminpassword';
 
-    const existingAdmin = await User.findOne({ email: adminEmail });
-    if (!existingAdmin) {
-      const adminUser = new User({
-        email: adminEmail,
-        username: 'admin',
-        password: adminPassword,
-        isAdmin: true
-      });
-      await adminUser.save();
-      console.log('Admin user created successfully');
-    } else {
-      console.log('Admin user already exists');
-    }
-  } catch (error) {
-    console.error('Error initializing admin user:', error);
-  }
-}
 const app = express();
 
+// CORS configuration
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      process.env.CLIENT_URL,
+    ].filter(Boolean),
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
+
 // Middleware
-app.use(cors({
-  origin: '*', // Your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 app.use(express.json());
 
-// Import the authentication middleware
-const { auth } = require('./middleware/auth');
+// Health check route
+app.get('/', (req, res) => {
+  res.status(200).send('Backend is running');
+});
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/wishlist', auth, require('./routes/wishlistRoutes'));
 
+// Handle unknown routes
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
 
 const PORT = process.env.PORT || 5000;
 
