@@ -1,7 +1,6 @@
 // Homepage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GlassyBackground from './GlassyBackground';
 import styles from './homepage.module.css';
 
 const Homepage = () => {
@@ -16,7 +15,6 @@ const Homepage = () => {
 
   return (
     <div className={styles.container}>
-      <GlassyBackground />
       <div className={styles.content}>
         <div className={`${styles.tagline} ${isVisible ? styles.visible : ''}`}>
           Discover Premium Shopping Excellence
