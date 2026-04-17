@@ -2,28 +2,45 @@ import axios from 'axios';
 
 // Initialize Axios instance
 const api = axios.create({
-    baseURL:  'https://market360-backend-t1er.onrender.com/api',
+    baseURL: process.env.REACT_APP_API_URL || 'https://market360-backend-t1er.onrender.com/api',
     timeout: 10000,
+    withCredentials: true,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
 });
 
 // Flag to prevent infinite logout loops
 let isLoggingOut = false;
+let csrfToken = null;
 
-// Request interceptor for authorization heade
+const isUnsafeMethod = (method) => ['post', 'put', 'patch', 'delete'].includes((method || '').toLowerCase());
+
+export const refreshCsrfToken = async () => {
+  const response = await api.get('/auth/csrf');
+  csrfToken = response.data?.csrfToken || null;
+  return csrfToken;
+};
+
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-}, (error) => {
-    return Promise.reject(error);
+  if (csrfToken && isUnsafeMethod(config.method)) {
+    config.headers = config.headers || {};
+    config.headers['X-CSRF-Token'] = csrfToken;
+  }
+  return config;
 });
 
 // Response interceptor for global error handling
 api.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
+    if (error.response?.status === 403 && error.response?.data?.message?.toLowerCase?.().includes('csrf')) {
+      try {
+        await refreshCsrfToken();
+        return api.request(error.config);
+      } catch {
+        // fall through
+      }
+    }
     // Only handle 401 errors if we're not already logging out and it's not a sign-in or signout attempt
     if (error.response?.status === 401 && 
         !isLoggingOut && 
@@ -70,9 +87,13 @@ export const signOut = async () => {
     } catch (error) {
         console.log('Signout API error:', error);
     } finally {
-        localStorage.removeItem('token');
         isLoggingOut = false; // Reset flag
     }
+};
+
+export const getMe = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
 };
 
 export const getProductsApproved = async (filters) => {
@@ -153,19 +174,6 @@ export const updateUserProfile = async (userId, profileData) => {
   try {
     const response = await api.put(`/users/${userId}`, profileData);
     const data = response.data;
-    
-    // Update the stored user data in localStorage
-    const currentUserData = JSON.parse(localStorage.getItem('user'));
-    if (currentUserData) {
-      const updatedUserData = {
-        ...currentUserData,
-        username: profileData.username,
-        email: profileData.email,
-        gender: profileData.gender,
-        country: profileData.country
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUserData));
-    }
     
     return data;
   } catch (error) {
@@ -291,10 +299,7 @@ export const updateProduct = async (productId, productDetails) => {
 };
 
 export const deleteProduct = async (productId) => {
-    const token = localStorage.getItem("token"); 
-    return await api.delete(`/products/${productId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    return await api.delete(`/products/${productId}`);
 };
 
 
