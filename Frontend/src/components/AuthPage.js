@@ -23,6 +23,8 @@ const AuthPage = () => {
     try {
       if (isSignIn) {
         const response = await signIn(formData.email, formData.password);
+        
+        localStorage.setItem('token', response.token);
         login(response.user); 
         navigate('/products');
       } else {
@@ -38,6 +40,7 @@ const AuthPage = () => {
         });
         const response = await signUp(formData.email, formData.password, formData.username, formData.confirmPassword);
         console.log('Signup response:', response);
+        localStorage.setItem('token', response.token);
         login(response.user); 
         navigate('/products');
       }

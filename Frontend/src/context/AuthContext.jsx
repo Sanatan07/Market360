@@ -1,6 +1,5 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { getMe, refreshCsrfToken, signOut } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -9,35 +8,23 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-    (async () => {
-      try {
-        await refreshCsrfToken();
-        const { user } = await getMe();
-        if (isMounted) setCurrentUser(user || null);
-      } catch {
-        if (isMounted) setCurrentUser(null);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-    };
+    // Check localStorage for user data on mount
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
+    }
+    setIsLoading(false);
   }, []);
 
   const login = (userData) => {
     setCurrentUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const logout = async () => {
-    try {
-      await signOut();
-    } catch {
-      // ignore
-    }
+  const logout = () => {
     setCurrentUser(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   return (

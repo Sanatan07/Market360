@@ -27,8 +27,8 @@ const Navbar = ({ handlePostDeal }) => {
   });
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    logout();
     navigate('/');
   };
 
@@ -215,12 +215,10 @@ const [isDarkMode, setIsDarkMode] = useState(
               <BsHeartFill className={styles.icon} style={{ color: '#e60023' }} />
               <span>Wishlist</span>
             </Link>
-            {currentUser?.isAdmin && (
-              <Link to="/Admin" className={styles.actionButton}>
-                <RiAdminFill className={styles.icon} style={{ color: '#21db53' }} />
-                <span>Admin</span>
-              </Link>
-            )}
+            <Link to="/Admin" className={styles.actionButton}>
+              <RiAdminFill className={styles.icon} style={{ color: '#21db53' }} />
+              <span>Admin</span>
+            </Link>
       {currentUser ? (
         <div className={styles.userSection}>
           <button 
