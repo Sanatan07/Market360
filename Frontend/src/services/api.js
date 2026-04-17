@@ -1,19 +1,27 @@
 import axios from 'axios';
 
+const CSRF_HEADER_NAME = 'x-csrf-token';
+let csrfToken = null;
+
+const setCsrfToken = (token) => {
+    csrfToken = token || null;
+};
+
 // Initialize Axios instance
 const api = axios.create({
-    baseURL:  'https://market360-backend-t1er.onrender.com/api',
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
     timeout: 10000,
+    withCredentials: true,
 });
 
 // Flag to prevent infinite logout loops
 let isLoggingOut = false;
 
-// Request interceptor for authorization heade
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    const method = String(config.method || 'GET').toUpperCase();
+    const isUnsafe = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
+    if (isUnsafe && csrfToken) {
+        config.headers[CSRF_HEADER_NAME] = csrfToken;
     }
     return config;
 }, (error) => {
@@ -41,10 +49,22 @@ api.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
+export const fetchCsrfToken = async () => {
+    const response = await api.get('/auth/csrf');
+    setCsrfToken(response.data?.csrfToken);
+    return response.data?.csrfToken;
+};
+
+export const getMe = async () => {
+    const response = await api.get('/auth/me');
+    return response.data;
+};
+
 // Authentication Services
 export const signIn = async (email, password) => {
     try {
         const response = await api.post('/auth/signin', { email, password });
+        await fetchCsrfToken();
         return response.data;
     } catch (error) {
         if (error.response?.status === 401) {
@@ -57,6 +77,7 @@ export const signIn = async (email, password) => {
 export const signUp = async (email, password, username, confirmPassword) => {
     try {
         const response = await api.post('/auth/signup', { email, password, username, confirmPassword });
+        await fetchCsrfToken();
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'An error occurred during sign up');
@@ -70,7 +91,7 @@ export const signOut = async () => {
     } catch (error) {
         console.log('Signout API error:', error);
     } finally {
-        localStorage.removeItem('token');
+        setCsrfToken(null);
         isLoggingOut = false; // Reset flag
     }
 };

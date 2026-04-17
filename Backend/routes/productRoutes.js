@@ -23,6 +23,7 @@ const express = require('express');
 const router = express.Router();
 const { createProduct, getProductsApproved, getProducts,  getProductById, updateProductStatus, deleteProduct, toggleLikeDislike, incrementViews, getProductsByUser, updateProduct } = require('../controllers/productController');
 const { auth} = require('../middleware/auth');
+const { writeLimiter } = require('../middleware/rateLimiters');
 const isAdmin = require('../middleware/isAdmin');
 // Multer configuration for handling image uploads (storage in memory)
 const storage = multer.memoryStorage();
@@ -30,15 +31,15 @@ const upload = multer({ storage: storage }).array('images');  // The field name 
 
 
 // Define routes
-router.post('/', auth, upload, createProduct);  // Add upload as middleware here
+router.post('/', writeLimiter, auth, upload, createProduct);  // Add upload as middleware here
 router.get('/pending', getProducts);
 router.get('/approved', getProductsApproved);
 router.get('/:id', getProductById);
-router.put('/:id/:action', auth, toggleLikeDislike);
-router.put('/:id/update/:action', auth, updateProductStatus);  // API for updating status
-router.delete('/:id', auth, deleteProduct);
+router.put('/:id/:action', writeLimiter, auth, toggleLikeDislike);
+router.put('/:id/update/:action', writeLimiter, auth, updateProductStatus);  // API for updating status
+router.delete('/:id', writeLimiter, auth, deleteProduct);
 router.patch('/:id/view', incrementViews);
 router.get('/userProducts/:createdBy', getProductsByUser);
-router.put('/:id', updateProduct);
+router.put('/:id', writeLimiter, auth, updateProduct);
 
 module.exports = router;

@@ -2,6 +2,24 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+const getCookieOptions = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const secure = String(process.env.COOKIE_SECURE || '').toLowerCase() === 'true' || isProduction;
+  const sameSite = process.env.COOKIE_SAMESITE || (isProduction ? 'none' : 'lax');
+
+  return {
+    httpOnly: true,
+    secure,
+    sameSite,
+    path: '/',
+  };
+};
+
+const issueAccessToken = (userId) => {
+  const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn });
+};
+
 const authController = {
   signup: async (req, res) => {
     try {
@@ -22,8 +40,13 @@ const authController = {
       const user = new User({ email, password, username });
       await user.save();
 
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-      res.status(201).json({ token, user: { id: user._id, email: user.email, username: user.username } });
+      const token = issueAccessToken(user._id);
+      res.cookie('access_token', token, {
+        ...getCookieOptions(),
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(201).json({ user: { id: user._id, email: user.email, username: user.username } });
     } catch (error) {
       res.status(500).json({ message: 'Error creating user' });
     }
@@ -38,8 +61,13 @@ const authController = {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-      res.json({ token, user: { id: user._id, email: user.email, username: user.username } });
+      const token = issueAccessToken(user._id);
+      res.cookie('access_token', token, {
+        ...getCookieOptions(),
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.json({ user: { id: user._id, email: user.email, username: user.username } });
     } catch (error) {
       res.status(500).json({ message: 'Error signing in' });
     }
@@ -47,12 +75,16 @@ const authController = {
 
   signout: async (req, res) => {
     try {
-      req.user = null;
-      req.token = null;
+      res.clearCookie('access_token', getCookieOptions());
       res.json({ message: 'Successfully signed out' });
     } catch (error) {
       res.status(500).json({ message: 'Error signing out' });
     }
+  },
+
+  me: async (req, res) => {
+    const user = req.user;
+    res.json({ user: { id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin } });
   }
 };
 

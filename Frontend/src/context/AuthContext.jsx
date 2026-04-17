@@ -1,5 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { getMe, signOut, fetchCsrfToken } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -8,12 +9,24 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check localStorage for user data on mount
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    const bootstrap = async () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) setCurrentUser(JSON.parse(storedUser));
+
+        const me = await getMe();
+        setCurrentUser(me.user);
+        localStorage.setItem('user', JSON.stringify(me.user));
+        await fetchCsrfToken();
+      } catch (e) {
+        setCurrentUser(null);
+        localStorage.removeItem('user');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    bootstrap();
   }, []);
 
   const login = (userData) => {
@@ -21,10 +34,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await signOut();
     setCurrentUser(null);
     localStorage.removeItem('user');
-    localStorage.removeItem('token');
   };
 
   return (

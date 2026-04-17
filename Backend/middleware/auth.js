@@ -1,9 +1,19 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const readToken = (req) => {
+  const cookieToken = req.cookies?.access_token;
+  if (cookieToken) return cookieToken;
+
+  const header = req.header('Authorization');
+  if (header?.startsWith('Bearer ')) return header.replace('Bearer ', '');
+
+  return null;
+};
+
 // Middleware for required authentication
 exports.auth = async (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const token = readToken(req);
 
   if (!token) {
     return res.status(401).json({ message: 'Authentication required' });
@@ -26,7 +36,7 @@ exports.auth = async (req, res, next) => {
 
 // Middleware for optional authentication (does not require a valid token)
 exports.optionalAuth = async (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const token = readToken(req);
   
   if (token) {
     try {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { createTheme } from '@mui/material/styles';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 import Home from './components/homepage'; // Import Home component
 import AuthPage from './components/AuthPage';
@@ -21,13 +21,14 @@ import styles from './components/ProductPage.module.css';
 const Layout = ({ children }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const { currentUser } = useAuth();
   
   return (
     <>
       {!isHomePage && <Navbar 
         handlePostDeal={() => {}} // We'll handle this via props
-        isAuthenticated={!!localStorage.getItem('token')}
-        currentUser={JSON.parse(localStorage.getItem('user') || '{}')}
+        isAuthenticated={!!currentUser}
+        currentUser={currentUser || {}}
       />}
       <div className="app-container">
         {children}
@@ -37,29 +38,12 @@ const Layout = ({ children }) => {
   );
 };
 
-const App = () => {
+const AppRoutes = () => {
   const [showProductModal, setShowProductModal] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
-  const [currentUser, setCurrentUser] = useState(null);
+  const { currentUser } = useAuth();
 
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
-
-  useEffect(() => {
-    const checkAuth = () => {
-      setIsAuthenticated(!!localStorage.getItem('token'));
-    };
-
-    window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
-  }, []);
-
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      const userData = JSON.parse(localStorage.getItem('user') || '{}');
-      setCurrentUser(userData);
-    }
-  }, [isAuthenticated]);
 
   const handlePostDeal = () => {
     setShowProductModal(true);
@@ -90,7 +74,7 @@ const App = () => {
                 <Route path="/profile" element={
                   <UserProfile 
                     currentUser={currentUser} 
-                    isAuthenticated={isAuthenticated} 
+                    isAuthenticated={!!currentUser} 
                   />
                 } />
                 <Route path="/wishlist" element={
@@ -101,6 +85,13 @@ const App = () => {
           } />
         </Routes>
       </Router>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppRoutes />
     </AuthProvider>
   );
 };
