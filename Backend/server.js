@@ -65,6 +65,9 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/deals', require('./routes/dealRoutes'));
+app.use('/api/ingest', require('./routes/ingestionRoutes'));
+app.use('/api/redirect', require('./routes/redirectRoutes'));
 app.use('/api/wishlist', auth, require('./routes/wishlistRoutes'));
 
 // Handle unknown routes

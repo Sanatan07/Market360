@@ -207,6 +207,16 @@ export const getProductById = async (id) => {
     }
 };
 
+export const getActiveDeals = async (filters = {}) => {
+    const response = await api.get('/deals/active', { params: filters });
+    return response.data;
+};
+
+export const getDealRedirectUrl = (dealId) => {
+    const baseUrl = api.defaults.baseURL || '';
+    return `${baseUrl}/redirect/go/${dealId}`;
+};
+
 
 export const createProduct = async (formData) => {
     try {

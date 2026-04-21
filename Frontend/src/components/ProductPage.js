@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getProducts, createProduct, toggleDislike, toggleLike, getProductsApproved, incrementProductView } from '../services/api';
+import { getProducts, createProduct, toggleDislike, toggleLike, getProductsApproved, incrementProductView, getActiveDeals, getDealRedirectUrl } from '../services/api';
 import styles from './ProductPage.module.css';
 import ProductFilter from './ProductFilter';
 import { Link } from 'react-router-dom';
@@ -96,11 +96,26 @@ const ProductPage = ({ showModal, setShowModal }) => {
 useEffect(() => {
   const fetchProducts = async () => {
     try {
-      const data = await getProductsApproved({ search: searchTermFromURL });
+      const deals = await getActiveDeals({});
+      const dealProducts = deals.map((deal) => ({
+        ...deal.productId,
+        activeDealId: deal._id,
+        dealScore: deal.dealScore,
+        salePrice: deal.currentPrice,
+        listPrice: deal.originalPrice || deal.productId?.listPrice,
+        dealUrl: getDealRedirectUrl(deal._id)
+      }));
+      const data = dealProducts.length > 0 ? dealProducts : await getProductsApproved({ search: searchTermFromURL });
       setProducts(data);
       setFilteredProducts(data);
     } catch (error) {
-      toast.error('Failed to fetch products');
+      try {
+        const data = await getProductsApproved({ search: searchTermFromURL });
+        setProducts(data);
+        setFilteredProducts(data);
+      } catch (fallbackError) {
+        toast.error('Failed to fetch products');
+      }
     }
   };
   fetchProducts();

@@ -50,41 +50,40 @@ const AppRoutes = () => {
   };
 
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Home route without navbar and footer */}
-          <Route path="/" element={<Home />} />
-          
-          {/* All other routes with navbar and footer */}
-          <Route path="/*" element={
-            <Layout>
-              <Routes>
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/products" element={
-                  <ProductPage 
-                    showModal={showProductModal} 
-                    setShowModal={setShowProductModal} 
-                  />
-                } />
-                <Route path="/products/:id" element={
-                  <ProductDescription currentUser={currentUser} />
-                } />
-                <Route path="/profile" element={
-                  <UserProfile 
-                    currentUser={currentUser} 
-                    isAuthenticated={!!currentUser} 
-                  />
-                } />
-                <Route path="/wishlist" element={
-                  <Wishlist currentUser={currentUser} />
-                } />
-              </Routes>
-            </Layout>
-          } />
-        </Routes>
-      </Router>
+    <Router>
+      <Routes>
+        {/* Home route without navbar and footer */}
+        <Route path="/" element={<Home />} />
+        
+        {/* All other routes with navbar and footer */}
+        <Route path="/*" element={
+          <Layout>
+            <Routes>
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/products" element={
+                <ProductPage 
+                  showModal={showProductModal} 
+                  setShowModal={setShowProductModal} 
+                />
+              } />
+              <Route path="/products/:id" element={
+                <ProductDescription currentUser={currentUser} />
+              } />
+              <Route path="/profile" element={
+                <UserProfile 
+                  currentUser={currentUser} 
+                  isAuthenticated={!!currentUser} 
+                />
+              } />
+              <Route path="/wishlist" element={
+                <Wishlist currentUser={currentUser} />
+              } />
+            </Routes>
+          </Layout>
+        } />
+      </Routes>
+    </Router>
   );
 };
 

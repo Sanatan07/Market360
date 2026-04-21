@@ -34,12 +34,12 @@ const upload = multer({ storage: storage }).array('images');  // The field name 
 router.post('/', writeLimiter, auth, upload, createProduct);  // Add upload as middleware here
 router.get('/pending', getProducts);
 router.get('/approved', getProductsApproved);
+router.get('/userProducts/:createdBy', getProductsByUser);
 router.get('/:id', getProductById);
 router.put('/:id/:action', writeLimiter, auth, toggleLikeDislike);
 router.put('/:id/update/:action', writeLimiter, auth, updateProductStatus);  // API for updating status
 router.delete('/:id', writeLimiter, auth, deleteProduct);
 router.patch('/:id/view', incrementViews);
-router.get('/userProducts/:createdBy', getProductsByUser);
 router.put('/:id', writeLimiter, auth, updateProduct);
 
 module.exports = router;

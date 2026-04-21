@@ -1,6 +1,8 @@
 const Product = require('../models/Product');
+const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2;
 const { uploadImage } = require('./cloudinary');
+const { upsertActiveDealForProduct } = require('../services/deals/dealEngine');
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
 const userActions = new Map();
 
@@ -78,6 +80,7 @@ const productController = {
         // Create and save the product to the database
         const product = new Product(productData);
         await product.save();
+        await upsertActiveDealForProduct(product, { dealType: 'manual' });
 
         res.status(201).json(product);  // Respond with the newly created product
     } catch (error) {
@@ -404,6 +407,7 @@ getProductsByUser : async (req, res) => {
 
       Object.assign(product, productUpdates);
       await product.save();
+      await upsertActiveDealForProduct(product, { dealType: 'manual' });
 
       res.json(product);
     } catch (error) {
