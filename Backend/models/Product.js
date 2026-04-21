@@ -132,6 +132,13 @@ const productSchema = new mongoose.Schema({
     default: true,
     index: true
   },
+  isQualifiedDeal: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  qualificationReasons: [{ type: String, trim: true }],
+  hiddenReasons: [{ type: String, trim: true }],
   complianceFlags: {
     priceFromApi: { type: Boolean, default: false },
     needsRefresh: { type: Boolean, default: false },
@@ -158,7 +165,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0
   }
-});
+}, { timestamps: true });
 
 productSchema.index({ source: 1, sourceProductId: 1 }, { unique: true, sparse: true });
 productSchema.index({ category: 1, isActive: 1, discountPercent: -1 });

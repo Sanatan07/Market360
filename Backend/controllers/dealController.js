@@ -4,7 +4,7 @@ const dealController = {
   getActiveDeals: async (req, res) => {
     try {
       const { source, category, limit = 50 } = req.query;
-      const query = { status: 'active' };
+      const query = { status: 'active', 'qualification.isQualified': true };
       if (source) query.source = source;
 
       const deals = await Deal.find(query)

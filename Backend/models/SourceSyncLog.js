@@ -3,13 +3,28 @@ const mongoose = require('mongoose');
 const sourceSyncLogSchema = new mongoose.Schema({
   source: {
     type: String,
-    enum: ['amazon', 'flipkart'],
+    enum: ['amazon', 'flipkart', 'system'],
     required: true,
     index: true
   },
   syncType: {
     type: String,
-    enum: ['manual-import', 'full-feed', 'delta-feed', 'price-refresh', 'offer-sync'],
+    enum: [
+      'manual-import',
+      'full-feed',
+      'delta-feed',
+      'price-refresh',
+      'offer-sync',
+      'homepage-validation',
+      'expire-stale-deals',
+      'trending-refresh',
+      'ranking-rebuild',
+      'dead-product-cleanup',
+      'best-deals-generation',
+      'archive-expired-deals',
+      'derived-statistics',
+      'evergreen-products'
+    ],
     required: true,
     index: true
   },

@@ -7,6 +7,7 @@ const { auth } = require('./middleware/auth');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { requireCsrf, CSRF_HEADER_NAME } = require('./middleware/csrf');
+const { startScheduler } = require('./services/scheduler');
 
 // Load env vars
 dotenv.config();
@@ -79,4 +80,5 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  startScheduler();
 });
