@@ -1,0 +1,100 @@
+body,
+.app-container {
+  background: var(--m360-bg) !important;
+  color: var(--m360-text) !important;
+}
+
+[data-theme="dark"] {
+  --primary-bg: var(--m360-bg);
+  --secondary-bg: var(--m360-surface);
+  --text-primary: var(--m360-text);
+  --text-secondary: var(--m360-muted);
+  --accent-color: var(--m360-blue);
+  --border-color: var(--m360-border);
+}
+
+[class*="container"],
+[class*="productContainer"],
+[class*="page"] {
+  background-color: var(--m360-bg);
+  color: var(--m360-text);
+}
+
+[class*="Card"],
+[class*="card"],
+[class*="panel"],
+[class*="Section"],
+[class*="section"],
+[class*="priceInfo"],
+[class*="descriptionSection"],
+[class*="profileSection"],
+[class*="analyticsSection"],
+[class*="modal"],
+[class*="editForm"],
+[class*="statusCard"],
+[class*="ruleItem"],
+[class*="alertItem"] {
+  background-color: var(--m360-surface);
+  border-color: var(--m360-border);
+  color: var(--m360-text);
+}
+
+button,
+[class*="Button"],
+[class*="button"] {
+  letter-spacing: 0;
+}
+
+[class*="submitButton"],
+[class*="saveButton"],
+[class*="btnBuy"],
+[class*="btnPrimary"],
+[class*="cta"],
+[class*="searchButton"] {
+  background: var(--m360-blue) !important;
+  color: #fff !important;
+  border-color: var(--m360-blue) !important;
+}
+
+[class*="approveButton"],
+[class*="selectedChip"],
+[class*="discount"] {
+  background: var(--m360-teal) !important;
+  color: #fff !important;
+}
+
+[class*="salePrice"],
+[class*="priceRow"] strong {
+  color: var(--m360-teal) !important;
+}
+
+[class*="title"],
+h1,
+h2,
+h3,
+h4 {
+  color: var(--m360-text);
+}
+
+[class*="subtitle"],
+[class*="meta"],
+[class*="descriptionText"],
+[class*="storeInfo"],
+[class*="emptyText"] {
+  color: var(--m360-muted);
+}
+
+input,
+select,
+textarea {
+  background: var(--m360-surface) !important;
+  color: var(--m360-text) !important;
+  border: 1px solid var(--m360-border) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--m360-blue) !important;
+  box-shadow: 0 0 0 3px rgba(23, 78, 166, 0.14) !important;
+}

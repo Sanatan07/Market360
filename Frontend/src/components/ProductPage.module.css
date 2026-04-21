@@ -6,45 +6,20 @@
   --secondary-bg: rgba(255, 255, 255, 0.8);
   --text-primary: #111111;
   --text-secondary: #666666;
-  --accent-color: #007aff;
-  --border-color: rgba(224, 224, 224, 0.5);
+  --accent-color: var(--m360-blue);
+  --border-color: var(--m360-border);
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   --pattern-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.05) 75%, transparent 75%, transparent);
   --blur-radius: 10px;
-  --card-radius: 16px;
+  --card-radius: 8px;
   --transition-speed: 0.3s;
-  --glow: 0 0 15px rgba(0, 122, 255, 0.5);
-  --dark-card-bg: rgba(30, 30, 30, 0.8);
-
-  /* Dark Mode */
-  --dark-primary-bg: rgba(12, 12, 12, 0.95);
-  --dark-secondary-bg: rgba(24, 24, 24, 0.8);
-  --dark-text-primary: #f5f5f5;
-  --dark-text-secondary: #cccccc;
-  --dark-accent-color: #0a84ff;
-  --dark-border-color: rgba(51, 51, 51, 0.5);
-  --dark-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --dark-pattern-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 75%, transparent);
-  --dark-glow: 0 0 15px rgba(10, 132, 255, 0.5);
+  --glow: 0 0 15px rgba(23, 78, 166, 0.18);
   
   /* New accent colors for variety */
-  --success-color: #34c759;
+  --success-color: var(--m360-teal);
   --warning-color: #ff9500;
   --error-color: #ff3b30;
   --info-color: #5ac8fa;
-}
-
-/* Theme switch - improved dark mode implementation */
-[data-theme="dark"] {
-  --primary-bg: var(--dark-primary-bg);
-  --secondary-bg: var(--dark-secondary-bg);
-  --text-primary: var(--dark-text-primary);
-  --text-secondary: var(--dark-text-secondary);
-  --accent-color: var(--dark-accent-color);
-  --border-color: var(--dark-border-color);
-  --shadow: var(--dark-shadow);
-  --pattern-bg: var(--dark-pattern-bg);
-  --glow: var(--dark-glow);
 }
 
 /* Font optimization with system font fallbacks */
@@ -68,11 +43,6 @@ body {
   transition: background-color 0.5s ease;
 }
 
-[data-theme="dark"] body {
-  background-color: var(--dark-primary-bg);
-  background-image: none;
-}
-
 /* Container with improved backdrop filter performance */
 .container {
   max-width: 2000px;
@@ -85,12 +55,6 @@ body {
   -webkit-backdrop-filter: blur(var(--blur-radius));
   border: 1px solid var(--border-color);
   transition: all 0.5s ease;
-}
-
-[data-theme="dark"] .container {
-  background: var(--dark-primary-bg);
-  box-shadow: none;
-  border: none;
 }
 
 .contentWrapper {

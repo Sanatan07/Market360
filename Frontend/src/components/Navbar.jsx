@@ -6,7 +6,6 @@ import { FaUser } from 'react-icons/fa';
 import { getProductsApproved } from '../services/api';
 import { useAuth } from '../context/AuthContext'; // Make sure to import useAuth
 import { BsHeartFill } from 'react-icons/bs';
-import DarkModeToggle from 'react-dark-mode-toggle';
 import { RiAdminFill } from "react-icons/ri";
 // Remove currentUser and handleLogout from props since we'll get them from useAuth
 const Navbar = ({ handlePostDeal }) => {
@@ -73,17 +72,6 @@ const handleSearchSubmit = () => {
     setShowSearchResults(false);
   }
 };
-
-const handleThemeToggle = () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  setIsDarkMode(newTheme === 'dark');
-};
-const [isDarkMode, setIsDarkMode] = useState(
-  document.documentElement.getAttribute('data-theme') === 'dark'
-);
-
 
   const handleSearchItemClick = (item) => {
     setSearchTerm(item);
@@ -184,17 +172,6 @@ const [isDarkMode, setIsDarkMode] = useState(
           </div>
 
           <div className={styles.actionButtons}>
-          <DarkModeToggle
-  onChange={handleThemeToggle}
-  checked={isDarkMode}
-  size={80}
-  className={styles.switch}  // Correct way to use styles
-  style={{ 
-    margin: '10px'
-
-  }}
-/>
-      
       <button 
         onClick={handlePostDeal}
         className={styles.actionButton}

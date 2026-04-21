@@ -28,20 +28,6 @@
   --dark-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
-[data-theme="dark"] {
-  --filter-bg: var(--dark-filter-bg);
-  --border-color: var(--dark-border-color);
-  --text-color: var(--dark-text-color);
-  --input-bg: var(--dark-input-bg);
-  --input-border: var(--dark-input-border);
-  --range-track: var(--dark-range-track);
-  --range-thumb: var(--dark-range-thumb);
-  --accent-color: var(--dark-accent-color);
-  --reset-btn-bg: var(--dark-reset-btn-bg);
-  --reset-btn-hover: var(--dark-reset-btn-hover);
-  --shadow: var(--dark-shadow);
-}
-
 .productFilter {
   width: 100%;
   max-width: 300px;

@@ -2,14 +2,16 @@
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  background: #f5f7fb;
-  color: #172033;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(255, 255, 255, 0.08), transparent 28%),
+    linear-gradient(135deg, #16345f 0%, #0f4f55 48%, #0f8b5f 100%);
+  color: #fff;
 }
 
 .hero {
-  background: linear-gradient(135deg, #16345f, #0f8b5f);
+  background: transparent;
   color: #fff;
-  padding: 56px 24px 40px;
+  padding: clamp(72px, 9vh, 120px) 24px;
   min-height: 100vh;
   min-height: 100dvh;
   height: 100vh;
@@ -24,27 +26,32 @@
   width: 100%;
   max-width: 1160px;
   margin: 0 auto;
+  transform: translateY(-2vh);
 }
 
 .eyebrow {
-  margin: 0 0 10px;
+  margin: 0 0 14px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0;
+  font-size: 0.98rem;
 }
 
 .hero h1 {
-  max-width: 760px;
+  max-width: 790px;
   margin: 0;
-  font-size: 3rem;
-  line-height: 1.05;
+  font-size: clamp(3rem, 4.3vw, 5.7rem);
+  line-height: 1.08;
+  font-weight: 800;
+  color: #fff;
 }
 
 .heroCopy {
-  max-width: 680px;
-  font-size: 1.05rem;
+  max-width: 760px;
+  font-size: clamp(1.05rem, 1.35vw, 1.35rem);
   opacity: 0.92;
-  margin: 16px 0 24px;
+  margin: 22px 0 28px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .searchBar {
@@ -54,9 +61,10 @@
   gap: 12px;
   background: #fff;
   color: #172033;
-  max-width: 760px;
+  width: min(760px, 100%);
   padding: 8px 8px 8px 16px;
   border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
 }
 
 .searchBar input {
@@ -80,22 +88,26 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 18px;
+  margin-top: 20px;
+  width: min(760px, 100%);
 }
 
 .chips a {
   color: #fff;
   border: 1px solid rgba(255,255,255,0.42);
   border-radius: 999px;
-  padding: 8px 12px;
+  padding: 9px 14px;
   text-decoration: none;
   text-transform: capitalize;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
 }
 
 .section {
   max-width: 1160px;
   margin: 0 auto;
   padding: 30px 24px 4px;
+  color: #fff;
 }
 
 .sectionHeader {
@@ -109,17 +121,19 @@
 .sectionHeader h2 {
   margin: 0;
   font-size: 1.5rem;
+  color: #fff;
 }
 
 .sectionHeader p {
   margin: 6px 0 0;
-  color: #687083;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .sectionHeader a {
-  color: #174ea6;
+  color: #fff;
   font-weight: 800;
   text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .dealGrid {
@@ -130,7 +144,7 @@
 
 @media (max-width: 900px) {
   .hero h1 {
-    font-size: 2.2rem;
+    font-size: 2.8rem;
   }
 
   .dealGrid {
@@ -139,6 +153,19 @@
 }
 
 @media (max-width: 560px) {
+  .hero {
+    align-items: flex-start;
+    padding-top: 72px;
+  }
+
+  .heroInner {
+    transform: none;
+  }
+
+  .hero h1 {
+    font-size: 2.45rem;
+  }
+
   .searchBar {
     grid-template-columns: 20px 1fr;
   }

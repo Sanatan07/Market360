@@ -14,6 +14,7 @@ import AdminPage from './components/AdminPage';
 import SeoLandingPage from './components/SeoLandingPage';
 
 import './index.css';
+import './market360-theme.css';
 
 // Layout component to conditionally render navbar and footer
 const Layout = ({ children }) => {
