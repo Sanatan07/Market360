@@ -119,6 +119,16 @@
   font-weight: 700;
 }
 
+.alertButton {
+  min-height: 36px;
+  border-radius: 6px;
+  border: 1px solid #d7dce7;
+  background: #fff;
+  color: #174ea6;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .compact .imageWrap {
   aspect-ratio: 16 / 10;
 }

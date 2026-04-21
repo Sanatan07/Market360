@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar, FaExternalLinkAlt } from 'react-icons/fa';
+import { createPriceAlert } from '../services/api';
 import { formatINR, getDiscount, needsAmazonDisclaimer, sourceLabel, verifiedAgo } from '../utils/dealFormat';
 import styles from './DealCard.module.css';
 
@@ -8,6 +9,13 @@ const DealCard = ({ product, section = 'deal-card', compact = false }) => {
   const discount = getDiscount(product);
   const imageUrl = product?.images?.[0]?.url || '/placeholder-image.jpg';
   const dealUrl = product?.dealUrl;
+  const handleAlert = async () => {
+    try {
+      await createPriceAlert({ productId: product._id, discountThreshold: 40 });
+    } catch (error) {
+      // Authenticated users can manage alerts from Profile > Alerts.
+    }
+  };
 
   return (
     <article className={`${styles.card} ${compact ? styles.compact : ''}`}>
@@ -38,6 +46,9 @@ const DealCard = ({ product, section = 'deal-card', compact = false }) => {
         >
           <FaExternalLinkAlt /> View Deal
         </a>
+        <button className={styles.alertButton} type="button" onClick={handleAlert}>
+          Notify at 40%+
+        </button>
       </div>
     </article>
   );

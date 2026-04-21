@@ -21,6 +21,8 @@ const sourceSyncLogSchema = new mongoose.Schema({
       'ranking-rebuild',
       'dead-product-cleanup',
       'best-deals-generation',
+      'price-alert-evaluation',
+      'daily-best-deals-email',
       'archive-expired-deals',
       'derived-statistics',
       'evergreen-products'

@@ -27,6 +27,13 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+  savedCategories: [{ type: String, trim: true, lowercase: true }],
+  personalization: {
+    dailyBestDealsEmail: { type: Boolean, default: false },
+    defaultDiscountThreshold: { type: Number, default: 40 },
+    preferredSources: [{ type: String, enum: ['amazon', 'flipkart'] }],
+    maxPrice: Number
+  },
   avatar: {
     type: String,
     default: 'default-avatar.png'

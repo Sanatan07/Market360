@@ -1,6 +1,7 @@
 const Deal = require('../../models/Deal');
 const Product = require('../../models/Product');
 const SourceSyncLog = require('../../models/SourceSyncLog');
+const { evaluatePriceAlerts, generateDailyBestDealAlerts } = require('../alerts/alertService');
 const { amazon, flipkart } = require('../connectors');
 const { upsertActiveDealForProduct } = require('../deals/dealEngine');
 
@@ -343,6 +344,32 @@ const generateTodaysBestDeals = async () => {
   }
 };
 
+const evaluateUserPriceAlerts = async () => {
+  const log = await createLog('price-alert-evaluation', { metadata: { job: 'evaluateUserPriceAlerts' } });
+  try {
+    const events = await evaluatePriceAlerts();
+    return finishLog(log, 'success', {
+      insertedCount: events.length,
+      metadata: { generatedEvents: events.map((event) => event._id) }
+    });
+  } catch (error) {
+    return finishLog(log, 'failed', { errorMessage: error.message });
+  }
+};
+
+const generateDailyBestDealsEmails = async () => {
+  const log = await createLog('daily-best-deals-email', { metadata: { job: 'generateDailyBestDealsEmails' } });
+  try {
+    const events = await generateDailyBestDealAlerts();
+    return finishLog(log, 'success', {
+      insertedCount: events.length,
+      metadata: { generatedEvents: events.map((event) => event._id) }
+    });
+  } catch (error) {
+    return finishLog(log, 'failed', { errorMessage: error.message });
+  }
+};
+
 const archiveExpiredDeals = async () => {
   const log = await createLog('archive-expired-deals', { metadata: { job: 'archiveExpiredDeals' } });
   try {
@@ -394,6 +421,8 @@ module.exports = {
   computeEvergreenProducts,
   expireStaleDeals,
   generateTodaysBestDeals,
+  evaluateUserPriceAlerts,
+  generateDailyBestDealsEmails,
   rebuildDerivedStatistics,
   rebuildRankings,
   refreshTopActiveDeals,

@@ -260,6 +260,41 @@ export const deleteAdminRule = async (ruleId) => {
     return response.data;
 };
 
+export const getPersonalizationPreferences = async () => {
+    const response = await api.get('/personalization/preferences');
+    return response.data;
+};
+
+export const updatePersonalizationPreferences = async (payload) => {
+    const response = await api.put('/personalization/preferences', payload);
+    return response.data;
+};
+
+export const getPriceAlerts = async () => {
+    const response = await api.get('/personalization/alerts');
+    return response.data;
+};
+
+export const createPriceAlert = async (payload) => {
+    const response = await api.post('/personalization/alerts', payload);
+    return response.data;
+};
+
+export const deletePriceAlert = async (alertId) => {
+    const response = await api.delete(`/personalization/alerts/${alertId}`);
+    return response.data;
+};
+
+export const getNotifications = async () => {
+    const response = await api.get('/personalization/notifications');
+    return response.data;
+};
+
+export const markNotificationRead = async (eventId) => {
+    const response = await api.patch(`/personalization/notifications/${eventId}/read`);
+    return response.data;
+};
+
 
 export const createProduct = async (formData) => {
     try {

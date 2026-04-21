@@ -431,6 +431,46 @@ textarea:focus {
   background-color: #e0e0e0;
 }
 
+.categoryChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 24px;
+}
+
+.categoryChip {
+  border: 1px solid #d7dce7;
+  background: #fff;
+  color: #172033;
+  border-radius: 999px;
+  padding: 8px 12px;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.selectedChip {
+  background: #174ea6;
+  border-color: #174ea6;
+  color: #fff;
+}
+
+.alertList {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 28px;
+}
+
+.alertItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 16px;

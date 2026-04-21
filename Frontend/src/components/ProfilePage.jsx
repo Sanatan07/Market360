@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getUserProducts, updateProduct, updateUserProfile } from '../services/api';
+import {
+  createPriceAlert,
+  deletePriceAlert,
+  getNotifications,
+  getPersonalizationPreferences,
+  getPriceAlerts,
+  getUserProducts,
+  updatePersonalizationPreferences,
+  updateProduct,
+  updateUserProfile
+} from '../services/api';
 import { Pencil, Eye, EyeOff, Save, X } from 'lucide-react';
 import styles from './ProfilePage.module.css';
 
@@ -21,10 +31,15 @@ const ProfilePage = () => {
   const { currentUser } = useAuth();
   const [userProducts, setUserProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [preferences, setPreferences] = useState({ savedCategories: [], personalization: { dailyBestDealsEmail: false, defaultDiscountThreshold: 40, preferredSources: [] } });
+  const [alerts, setAlerts] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [alertForm, setAlertForm] = useState({ category: 'electronics', discountThreshold: 40, source: '' });
 
   const categories = [
-    'Electronics', 'Fashion', 'Home & Garden', 'Books',
-    'Sports & Outdoors', 'Toys & Games', 'Beauty', 'Automotive'
+    'electronics', 'mobiles-accessories', 'computers', 'audio',
+    'kitchen-appliances', 'home-living', 'fashion', 'beauty-personal-care',
+    'toys-books', 'fitness-sports', 'automotive'
   ];
 
   // Load user data into form when currentUser changes
@@ -61,6 +76,28 @@ const ProfilePage = () => {
       console.log('No user or user ID available');
     }
   }, [currentUser, fetchUserProducts]);
+
+  const fetchPersonalization = useCallback(async () => {
+    try {
+      const [prefs, priceAlerts, inbox] = await Promise.all([
+        getPersonalizationPreferences(),
+        getPriceAlerts(),
+        getNotifications()
+      ]);
+      setPreferences({
+        savedCategories: prefs.savedCategories || [],
+        personalization: prefs.personalization || { dailyBestDealsEmail: false, defaultDiscountThreshold: 40, preferredSources: [] }
+      });
+      setAlerts(priceAlerts);
+      setNotifications(inbox);
+    } catch (error) {
+      console.error('Failed to load personalization:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentUser) fetchPersonalization();
+  }, [currentUser, fetchPersonalization]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -136,6 +173,28 @@ const ProfilePage = () => {
     }
   };
 
+  const toggleSavedCategory = (category) => {
+    const current = new Set(preferences.savedCategories || []);
+    if (current.has(category)) current.delete(category);
+    else current.add(category);
+    setPreferences({ ...preferences, savedCategories: Array.from(current) });
+  };
+
+  const handleSavePreferences = async () => {
+    await updatePersonalizationPreferences(preferences);
+    await fetchPersonalization();
+  };
+
+  const handleCreateAlert = async (event) => {
+    event.preventDefault();
+    await createPriceAlert({
+      category: alertForm.category,
+      source: alertForm.source || undefined,
+      discountThreshold: Number(alertForm.discountThreshold)
+    });
+    await fetchPersonalization();
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.tabContainer}>
@@ -150,6 +209,12 @@ const ProfilePage = () => {
           onClick={() => setActiveTab('products')}
         >
           My Products
+        </button>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'alerts' ? styles.active : ''}`}
+          onClick={() => setActiveTab('alerts')}
+        >
+          Alerts
         </button>
       </div>
 
@@ -412,6 +477,93 @@ const ProfilePage = () => {
                 </div>
               </div>
             )}
+          </div>
+        )}
+        {activeTab === 'alerts' && (
+          <div className={styles.profileSection}>
+            <h2>Personalized Deals</h2>
+            <div className={styles.formGrid}>
+              <div className={styles.inputGroup}>
+                <label>Daily best-deals email</label>
+                <select
+                  value={preferences.personalization?.dailyBestDealsEmail ? 'yes' : 'no'}
+                  onChange={(e) => setPreferences({
+                    ...preferences,
+                    personalization: { ...preferences.personalization, dailyBestDealsEmail: e.target.value === 'yes' }
+                  })}
+                >
+                  <option value="no">Off</option>
+                  <option value="yes">On</option>
+                </select>
+              </div>
+              <div className={styles.inputGroup}>
+                <label>Notify when discount is above</label>
+                <input
+                  type="number"
+                  value={preferences.personalization?.defaultDiscountThreshold || 40}
+                  onChange={(e) => setPreferences({
+                    ...preferences,
+                    personalization: { ...preferences.personalization, defaultDiscountThreshold: Number(e.target.value) }
+                  })}
+                />
+              </div>
+            </div>
+            <h3>Saved Categories</h3>
+            <div className={styles.categoryChips}>
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`${styles.categoryChip} ${(preferences.savedCategories || []).includes(category) ? styles.selectedChip : ''}`}
+                  onClick={() => toggleSavedCategory(category)}
+                >
+                  {category.replace(/-/g, ' ')}
+                </button>
+              ))}
+            </div>
+            <button className={styles.saveButton} type="button" onClick={handleSavePreferences}>Save Preferences</button>
+
+            <h3>Price-Drop and Discount Alerts</h3>
+            <form className={styles.formGrid} onSubmit={handleCreateAlert}>
+              <div className={styles.inputGroup}>
+                <label>Category</label>
+                <select value={alertForm.category} onChange={(e) => setAlertForm({ ...alertForm, category: e.target.value })}>
+                  {categories.map((category) => <option key={category} value={category}>{category.replace(/-/g, ' ')}</option>)}
+                </select>
+              </div>
+              <div className={styles.inputGroup}>
+                <label>Source</label>
+                <select value={alertForm.source} onChange={(e) => setAlertForm({ ...alertForm, source: e.target.value })}>
+                  <option value="">Any</option>
+                  <option value="amazon">Amazon</option>
+                  <option value="flipkart">Flipkart</option>
+                </select>
+              </div>
+              <div className={styles.inputGroup}>
+                <label>Discount threshold</label>
+                <input type="number" value={alertForm.discountThreshold} onChange={(e) => setAlertForm({ ...alertForm, discountThreshold: e.target.value })} />
+              </div>
+              <button className={styles.saveButton} type="submit">Create Alert</button>
+            </form>
+
+            <div className={styles.alertList}>
+              {alerts.map((alert) => (
+                <div key={alert._id} className={styles.alertItem}>
+                  <span>{alert.productId?.title || alert.category || 'Watchlist alert'} · {alert.discountThreshold}%+ off</span>
+                  <button className={styles.cancelButton} onClick={() => deletePriceAlert(alert._id).then(fetchPersonalization)}>Remove</button>
+                </div>
+              ))}
+            </div>
+
+            <h3>Notifications</h3>
+            <div className={styles.alertList}>
+              {notifications.map((event) => (
+                <div key={event._id} className={styles.alertItem}>
+                  <span><strong>{event.title}</strong> {event.message}</span>
+                  <span>{event.status}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

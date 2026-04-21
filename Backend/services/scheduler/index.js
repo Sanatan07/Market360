@@ -31,6 +31,7 @@ const startScheduler = () => {
   schedule('7 * * * *', 'hourly:refresh-top-active-deals', () => workflows.refreshTopActiveDeals(500));
   schedule('17 * * * *', 'hourly:validate-homepage-items', workflows.validateHomepageItems);
   schedule('27 * * * *', 'hourly:expire-stale-deals', workflows.expireStaleDeals);
+  schedule('37 * * * *', 'hourly:evaluate-user-price-alerts', workflows.evaluateUserPriceAlerts);
 
   schedule('13 */6 * * *', 'six-hour:category-delta-sync', async () => {
     for (const category of workflows.TARGET_CATEGORIES) {
@@ -43,6 +44,7 @@ const startScheduler = () => {
   schedule('35 3 * * *', 'daily:rebuild-rankings', workflows.rebuildRankings);
   schedule('5 4 * * *', 'daily:remove-dead-products', workflows.removeDeadProducts);
   schedule('25 4 * * *', 'daily:generate-todays-best-deals', workflows.generateTodaysBestDeals);
+  schedule('45 4 * * *', 'daily:generate-best-deals-email-events', workflows.generateDailyBestDealsEmails);
 
   schedule('15 5 * * 0', 'weekly:archive-expired-deals', workflows.archiveExpiredDeals);
   schedule('45 5 * * 0', 'weekly:rebuild-derived-statistics', workflows.rebuildDerivedStatistics);
