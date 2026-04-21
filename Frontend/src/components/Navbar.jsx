@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
-import { BsBellFill } from 'react-icons/bs';
 import { IoAddCircle } from 'react-icons/io5';
 import { FaUser } from 'react-icons/fa';
-import { IoIosArrowDown } from 'react-icons/io';
-import { HiTrendingUp } from 'react-icons/hi';
-import { getProducts, getProductsApproved } from '../services/api';
+import { getProductsApproved } from '../services/api';
 import { useAuth } from '../context/AuthContext'; // Make sure to import useAuth
-import market from '../assets/market360.jpeg';
-import Wishlist from './Wishlist';
 import { BsHeartFill } from 'react-icons/bs';
-import { useLocation } from 'react-router-dom';
 import DarkModeToggle from 'react-dark-mode-toggle';
 import { RiAdminFill } from "react-icons/ri";
 // Remove currentUser and handleLogout from props since we'll get them from useAuth
@@ -20,7 +14,6 @@ const Navbar = ({ handlePostDeal }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const { currentUser, logout } = useAuth();
-  const location = useLocation();
   const [searchHistory, setSearchHistory] = useState(() => {
     const savedHistory = localStorage.getItem('searchHistory');
     return savedHistory ? JSON.parse(savedHistory) : [];

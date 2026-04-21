@@ -10,7 +10,6 @@ import { FaShare } from "react-icons/fa";
 import { formatINR, getDiscount, needsAmazonDisclaimer, verifiedAgo } from '../utils/dealFormat';
 
 const ProductDescription = ({ currentUser }) => {
-  const [products, setProducts] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getProducts, createProduct, toggleDislike, toggleLike, getProductsApproved, incrementProductView, getActiveDeals, getDealRedirectUrl } from '../services/api';
+import { createProduct, toggleDislike, toggleLike, getProductsApproved, incrementProductView, getActiveDeals, getDealRedirectUrl } from '../services/api';
 import styles from './ProductPage.module.css';
 import ProductFilter from './ProductFilter';
 import { Link } from 'react-router-dom';
@@ -7,16 +7,10 @@ import toast from 'react-hot-toast';
 import { getWishlist, addToWishlist, removeFromWishlist } from '../services/api';
 import { FaShare } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { FaLightbulb } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { useLocation } from 'react-router-dom';
-import DarkModeToggle from 'react-dark-mode-toggle';
 import DealCard from './DealCard';
 import { getDiscount } from '../utils/dealFormat';
-
-// In the return statement:
-
-const initialPriceRange = { min: 0, max: 1000 };
 
 const ProductPage = ({ showModal, setShowModal }) => {
   const [products, setProducts] = useState([]);
@@ -33,7 +27,6 @@ const ProductPage = ({ showModal, setShowModal }) => {
   });
   const [imagesPreview, setImagesPreview] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchTermFromURL = searchParams.get('q') || '';
@@ -95,10 +88,6 @@ const ProductPage = ({ showModal, setShowModal }) => {
       toast.error(error.response?.data?.message || 'Failed to update wishlist');
     }
   };
-
-  const [isDarkMode, setIsDarkMode] = useState(
-    document.documentElement.getAttribute('data-theme') === 'dark'
-  );
 
 // ProductPage.js
 useEffect(() => {
@@ -267,7 +256,6 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setUploadError(null);
 
     const formData = new FormData();
     Object.keys(newProduct).forEach(key => {
@@ -301,35 +289,16 @@ useEffect(() => {
         const updatedProducts = await getProductsApproved({});
         setProducts(updatedProducts);
     } catch (error) {
-        setUploadError(error.message);
         toast.error(error.message || 'Failed to create product');
     } finally {
         setLoading(false);
     }
 };
 
-const handleThemeToggle = () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  setIsDarkMode(newTheme === 'dark');
-};
-
 
   return (
     
     <div className={styles.container}>
-{/* <DarkModeToggle
-  onChange={handleThemeToggle}
-  checked={isDarkMode}
-  size={80}
-  className={styles.switch}  // Correct way to use styles
-  style={{ 
-    margin: '10px'
-
-  }}
-/> */}
-
       {showModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>

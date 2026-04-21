@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { createTheme } from '@mui/material/styles';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 import Home from './components/homepage'; // Import Home component
@@ -16,7 +14,6 @@ import AdminPage from './components/AdminPage';
 import SeoLandingPage from './components/SeoLandingPage';
 
 import './index.css';
-import styles from './components/ProductPage.module.css';
 
 // Layout component to conditionally render navbar and footer
 const Layout = ({ children }) => {
@@ -42,13 +39,6 @@ const Layout = ({ children }) => {
 const AppRoutes = () => {
   const [showProductModal, setShowProductModal] = useState(false);
   const { currentUser } = useAuth();
-
-  const mode = useSelector((state) => state.global.mode);
-  const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
-
-  const handlePostDeal = () => {
-    setShowProductModal(true);
-  };
 
   return (
     <Router>
