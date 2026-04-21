@@ -32,16 +32,23 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
+    const requestUrl = error.config?.url || '';
+    const isAuthProbe = requestUrl.includes('/auth/me') || requestUrl.includes('/auth/csrf');
+    const isAuthRoute = window.location.pathname === '/auth';
+
     // Only handle 401 errors if we're not already logging out and it's not a sign-in or signout attempt
     if (error.response?.status === 401 && 
         !isLoggingOut && 
-        !error.config.url.includes('/auth/signin') &&
-        !error.config.url.includes('/auth/signout')) {
+        !isAuthProbe &&
+        !isAuthRoute &&
+        !requestUrl.includes('/auth/signin') &&
+        !requestUrl.includes('/auth/signout')) {
         
         isLoggingOut = true;
         try {
             await signOut();
-            window.location.href = '/auth'; // Redirect to auth page instead of reload
+            window.history.pushState({}, '', '/auth');
+            window.dispatchEvent(new PopStateEvent('popstate'));
         } finally {
             isLoggingOut = false;
         }

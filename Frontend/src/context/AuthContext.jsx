@@ -14,10 +14,15 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) setCurrentUser(JSON.parse(storedUser));
 
-        const me = await getMe();
-        setCurrentUser(me.user);
-        localStorage.setItem('user', JSON.stringify(me.user));
-        await fetchCsrfToken();
+        try {
+          const me = await getMe();
+          setCurrentUser(me.user);
+          localStorage.setItem('user', JSON.stringify(me.user));
+          await fetchCsrfToken();
+        } catch (authError) {
+          setCurrentUser(null);
+          localStorage.removeItem('user');
+        }
       } catch (e) {
         setCurrentUser(null);
         localStorage.removeItem('user');
