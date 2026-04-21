@@ -14,8 +14,7 @@ body,
 }
 
 [class*="container"],
-[class*="productContainer"],
-[class*="page"] {
+[class*="productContainer"] {
   background-color: var(--m360-bg);
   color: var(--m360-text);
 }

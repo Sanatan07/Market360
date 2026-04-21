@@ -4,13 +4,13 @@
   min-height: 100dvh;
   background:
     radial-gradient(circle at 78% 24%, rgba(255, 255, 255, 0.08), transparent 28%),
-    linear-gradient(135deg, #16345f 0%, #0f4f55 48%, #0f8b5f 100%);
-  color: #fff;
+    linear-gradient(135deg, #16345f 0%, #0f4f55 48%, #0f8b5f 100%) !important;
+  color: #fff !important;
 }
 
 .hero {
   background: transparent;
-  color: #fff;
+  color: #fff !important;
   padding: clamp(72px, 9vh, 120px) 24px;
   min-height: 100vh;
   min-height: 100dvh;
@@ -35,6 +35,7 @@
   text-transform: uppercase;
   letter-spacing: 0;
   font-size: 0.98rem;
+  color: #fff !important;
 }
 
 .hero h1 {
@@ -43,7 +44,7 @@
   font-size: clamp(3rem, 4.3vw, 5.7rem);
   line-height: 1.08;
   font-weight: 800;
-  color: #fff;
+  color: #fff !important;
 }
 
 .heroCopy {
@@ -51,7 +52,7 @@
   font-size: clamp(1.05rem, 1.35vw, 1.35rem);
   opacity: 0.92;
   margin: 22px 0 28px;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.92) !important;
 }
 
 .searchBar {
@@ -107,7 +108,7 @@
   max-width: 1160px;
   margin: 0 auto;
   padding: 30px 24px 4px;
-  color: #fff;
+  color: #fff !important;
 }
 
 .sectionHeader {
@@ -121,12 +122,12 @@
 .sectionHeader h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #fff;
+  color: #fff !important;
 }
 
 .sectionHeader p {
   margin: 6px 0 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.78) !important;
 }
 
 .sectionHeader a {
