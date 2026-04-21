@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import UserProfile from './components/ProfilePage';
 import Wishlist from './components/Wishlist';
 import AdminPage from './components/AdminPage';
+import SeoLandingPage from './components/SeoLandingPage';
 
 import './index.css';
 import styles from './components/ProductPage.module.css';
@@ -79,6 +80,10 @@ const AppRoutes = () => {
               <Route path="/wishlist" element={
                 <Wishlist currentUser={currentUser} />
               } />
+              <Route path="/deals/:category" element={<SeoLandingPage type="category-page" />} />
+              <Route path="/store/:source" element={<SeoLandingPage type="store-page" />} />
+              <Route path="/content/:slug" element={<SeoLandingPage type="content-page" />} />
+              <Route path="/:page" element={<SeoLandingPage type="seo-page" />} />
             </Routes>
           </Layout>
         } />

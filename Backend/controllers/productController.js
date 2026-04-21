@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const PriceHistory = require('../models/PriceHistory');
 const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2;
 const { uploadImage } = require('./cloudinary');
@@ -434,6 +435,21 @@ getProductsByUser : async (req, res) => {
     } catch (error) {
       console.error('Error incrementing view count:', error);
       res.status(500).json({ message: 'Error incrementing view count', error: error.message });
+    }
+  },
+
+  getProductPriceHistory: async (req, res) => {
+    try {
+      const days = Math.min(Number(req.query.days) || 30, 180);
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+      const history = await PriceHistory.find({
+        productId: req.params.id,
+        capturedAt: { $gte: since }
+      }).sort({ capturedAt: 1 }).lean();
+
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching price history', error: error.message });
     }
   },
 

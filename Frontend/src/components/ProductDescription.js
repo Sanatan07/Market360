@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { toggleDislike, toggleLike, getProductById } from '../services/api';
+import { toggleDislike, toggleLike, getProductById, getProductPriceHistory } from '../services/api';
 import styles from './ProductDescription.module.css';
 import { getWishlist, addToWishlist, removeFromWishlist, incrementProductView } from '../services/api';
 import toast from 'react-hot-toast';
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { FaShare } from "react-icons/fa";
+import { formatINR, getDiscount, needsAmazonDisclaimer, verifiedAgo } from '../utils/dealFormat';
 
 const ProductDescription = ({ currentUser }) => {
   const [products, setProducts] = useState([]);
@@ -17,6 +18,7 @@ const ProductDescription = ({ currentUser }) => {
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [wishlistedProducts, setWishlistedProducts] = useState(new Set());
+  const [priceHistory, setPriceHistory] = useState([]);
 
   const handleLike = useCallback(async (productId) => {
     try {
@@ -132,6 +134,7 @@ const ProductDescription = ({ currentUser }) => {
         };
         console.log('Fetched product data:', productWithImages);
         setProduct(productWithImages);
+        getProductPriceHistory(id).then(setPriceHistory).catch(() => setPriceHistory([]));
         setLoading(false);
       } catch (err) {
         console.error('Error fetching product:', err);
@@ -145,9 +148,9 @@ const ProductDescription = ({ currentUser }) => {
     }
   }, [id]);
 
-  const discount = product && product.listPrice > 0
-    ? Math.round(((product.listPrice - product.salePrice) / product.listPrice) * 100)
-    : 0;
+  const discount = getDiscount(product);
+  const maxHistoryPrice = Math.max(...priceHistory.map((item) => item.currentPrice || 0), product.listPrice || 0, 1);
+  const features = product.features?.length ? product.features : product.description?.split('.').filter(Boolean).slice(0, 4) || [];
 
   if (loading) {
     return (
@@ -225,9 +228,9 @@ const ProductDescription = ({ currentUser }) => {
         <section className={styles.detailsSection}>
           <div className={styles.priceInfo}>
             <div className={styles.priceBlock}>
-              <span className={styles.salePrice}>${product.salePrice?.toFixed(2) || '0.00'}</span>
+              <span className={styles.salePrice}>{formatINR(product.salePrice)}</span>
               {product.listPrice > 0 && (
-                <span className={styles.originalPrice}>${product.listPrice?.toFixed(2)}</span>
+                <span className={styles.originalPrice}>{formatINR(product.listPrice)}</span>
               )}
               {discount > 0 && (
                 <span className={styles.discount}>
@@ -239,7 +242,13 @@ const ProductDescription = ({ currentUser }) => {
             <div className={styles.storeInfo}>
               <p>Available at <strong>{product.store || 'N/A'}</strong></p>
               <p>Category: <strong>{product.category || 'N/A'}</strong></p>
+              <p>Source: <strong>{product.source || 'manual'}</strong></p>
+              <p><strong>{verifiedAgo(product.priceVerifiedAt || product.lastSyncedAt)}</strong></p>
             </div>
+            <p className={styles.disclosure}>
+              Market360 may earn a commission when you buy through affiliate links. Price and availability can change on the merchant site.
+              {needsAmazonDisclaimer(product) ? ' As an Amazon Associate, Market360 earns from qualifying purchases.' : ''}
+            </p>
 
             {product.dealUrl && (
               // <a
@@ -294,6 +303,43 @@ const ProductDescription = ({ currentUser }) => {
             <p className={styles.descriptionText}>
               {product.description || "No description available"}
             </p>
+          </div>
+          <div className={styles.descriptionSection}>
+            <h2 className={styles.descriptionTitle}>Price History</h2>
+            <div className={styles.priceChart}>
+              {(priceHistory.length ? priceHistory : [{ currentPrice: product.salePrice, capturedAt: product.priceVerifiedAt || product.createdAt }]).map((point, index) => (
+                <div key={`${point.capturedAt}-${index}`} className={styles.priceBarWrap}>
+                  <span
+                    className={styles.priceBar}
+                    style={{ height: `${Math.max(10, ((point.currentPrice || 0) / maxHistoryPrice) * 100)}%` }}
+                    title={`${formatINR(point.currentPrice)} on ${new Date(point.capturedAt).toLocaleDateString()}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.descriptionSection}>
+            <h2 className={styles.descriptionTitle}>Key Features</h2>
+            <ul className={styles.featureList}>
+              {features.slice(0, 6).map((feature, index) => <li key={index}>{feature}</li>)}
+            </ul>
+          </div>
+          <div className={styles.summaryGrid}>
+            <div>
+              <h2 className={styles.descriptionTitle}>Pros</h2>
+              <ul className={styles.featureList}>
+                <li>{discount}% current discount</li>
+                <li>{product.rating ? `${product.rating} star rating` : 'Freshly discovered deal'}</li>
+                <li>{product.inStock === false ? 'Availability needs checking' : 'Currently marked in stock'}</li>
+              </ul>
+            </div>
+            <div>
+              <h2 className={styles.descriptionTitle}>Watchouts</h2>
+              <ul className={styles.featureList}>
+                <li>Final price may change on {product.store || 'merchant'} checkout.</li>
+                <li>Review quality and warranty should be checked before purchase.</li>
+              </ul>
+            </div>
           </div>
         </section>
       </main>

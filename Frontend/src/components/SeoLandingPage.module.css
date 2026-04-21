@@ -1,0 +1,88 @@
+.page {
+  background: #f5f7fb;
+  min-height: 100vh;
+  padding: 32px 24px 56px;
+  color: #172033;
+}
+
+.header,
+.copy,
+.internalLinks,
+.grid {
+  max-width: 1160px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  background: #ffffff;
+  border: 1px solid #e7e9ee;
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(20, 28, 45, 0.08);
+}
+
+.header p {
+  margin: 0 0 8px;
+  color: #0f8b5f;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0 0 12px;
+  font-size: 2.25rem;
+}
+
+.header span {
+  color: #687083;
+  font-size: 1.05rem;
+}
+
+.copy {
+  margin-top: 18px;
+  background: #fff8db;
+  border: 1px solid #f0dc8a;
+  border-radius: 8px;
+  padding: 18px 22px;
+}
+
+.copy p {
+  margin: 0;
+}
+
+.internalLinks {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.internalLinks a {
+  text-decoration: none;
+  color: #174ea6;
+  background: #ffffff;
+  border: 1px solid #d7dce7;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.grid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

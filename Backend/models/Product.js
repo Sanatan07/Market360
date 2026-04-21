@@ -164,6 +164,14 @@ const productSchema = new mongoose.Schema({
   viewCount: {  // Added this field
     type: Number,
     default: 0
+  },
+  clickCount: {
+    type: Number,
+    default: 0,
+    index: true
+  },
+  lastClickedAt: {
+    type: Date
   }
 }, { timestamps: true });
 

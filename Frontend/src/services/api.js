@@ -207,14 +207,57 @@ export const getProductById = async (id) => {
     }
 };
 
+export const getProductPriceHistory = async (id, days = 30) => {
+    const response = await api.get(`/products/${id}/price-history`, { params: { days } });
+    return response.data;
+};
+
 export const getActiveDeals = async (filters = {}) => {
     const response = await api.get('/deals/active', { params: filters });
     return response.data;
 };
 
-export const getDealRedirectUrl = (dealId) => {
+export const getDealRedirectUrl = (dealId, metadata = {}) => {
     const baseUrl = api.defaults.baseURL || '';
-    return `${baseUrl}/redirect/go/${dealId}`;
+    const rootUrl = baseUrl.replace(/\/api\/?$/, '');
+    const params = new URLSearchParams(metadata);
+    const query = params.toString();
+    return `${rootUrl}/go/${dealId}${query ? `?${query}` : ''}`;
+};
+
+export const getAffiliateAnalyticsOverview = async (filters = {}) => {
+    const response = await api.get('/analytics/affiliate/overview', { params: filters });
+    return response.data;
+};
+
+export const getAdminOpsOverview = async () => {
+    const response = await api.get('/admin-ops/overview');
+    return response.data;
+};
+
+export const updateAdminDealStatus = async (dealId, payload) => {
+    const response = await api.patch(`/admin-ops/deals/${dealId}/status`, payload);
+    return response.data;
+};
+
+export const validateAdminAffiliateLink = async (dealId) => {
+    const response = await api.post(`/admin-ops/deals/${dealId}/validate-link`);
+    return response.data;
+};
+
+export const updateAdminProductControls = async (productId, payload) => {
+    const response = await api.patch(`/admin-ops/products/${productId}/controls`, payload);
+    return response.data;
+};
+
+export const createAdminRule = async (payload) => {
+    const response = await api.post('/admin-ops/rules', payload);
+    return response.data;
+};
+
+export const deleteAdminRule = async (ruleId) => {
+    const response = await api.delete(`/admin-ops/rules/${ruleId}`);
+    return response.data;
 };
 
 

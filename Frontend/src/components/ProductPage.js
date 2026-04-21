@@ -11,6 +11,8 @@ import { FaLightbulb } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { useLocation } from 'react-router-dom';
 import DarkModeToggle from 'react-dark-mode-toggle';
+import DealCard from './DealCard';
+import { getDiscount } from '../utils/dealFormat';
 
 // In the return statement:
 
@@ -35,6 +37,7 @@ const ProductPage = ({ showModal, setShowModal }) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchTermFromURL = searchParams.get('q') || '';
+  const categoryFromURL = searchParams.get('category') || '';
   const categories = [
     'Electronics', 'Fashion', 'Home & Garden', 'Books', 
     'Sports & Outdoors', 'Toys & Games', 'Beauty', 'Automotive'
@@ -44,9 +47,14 @@ const ProductPage = ({ showModal, setShowModal }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filters, setFilters] = useState({
     priceRange: { min: 0, max: 100000 },
-    categories: [],
+    categories: categoryFromURL ? [categoryFromURL] : [],
     searchTerm: searchTermFromURL,
-
+    source: '',
+    minDiscount: 0,
+    minRating: 0,
+    brand: '',
+    availability: 'in-stock',
+    sortBy: 'dealScore',
   });
   const [wishlistedProducts, setWishlistedProducts] = useState(new Set());
 
@@ -103,7 +111,7 @@ useEffect(() => {
         dealScore: deal.dealScore,
         salePrice: deal.currentPrice,
         listPrice: deal.originalPrice || deal.productId?.listPrice,
-        dealUrl: getDealRedirectUrl(deal._id)
+        dealUrl: getDealRedirectUrl(deal._id, { section: 'deals-grid', placement: deal.productId?.category || 'unknown' })
       }));
       const data = dealProducts.length > 0 ? dealProducts : await getProductsApproved({ search: searchTermFromURL });
       setProducts(data);
@@ -133,6 +141,11 @@ useEffect(() => {
       let result = products.filter((product) =>
         product.salePrice >= filters.priceRange.min &&
         product.salePrice <= filters.priceRange.max &&
+        getDiscount(product) >= Number(filters.minDiscount || 0) &&
+        (!filters.source || product.source === filters.source) &&
+        (!filters.minRating || Number(product.rating || 0) >= Number(filters.minRating)) &&
+        (!filters.brand || product.brand?.toLowerCase().includes(filters.brand.toLowerCase())) &&
+        (filters.availability !== 'in-stock' || product.inStock !== false) &&
         (filters.searchTerm === '' ||
           (product.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
             product.description?.toLowerCase().includes(filters.searchTerm.toLowerCase())))
@@ -141,6 +154,13 @@ useEffect(() => {
       if (filters.categories.length > 0) {
         result = result.filter(product => filters.categories.includes(product.category));
       }
+
+      result = [...result].sort((a, b) => {
+        if (filters.sortBy === 'newest') return new Date(b.lastSyncedAt || b.createdAt || 0) - new Date(a.lastSyncedAt || a.createdAt || 0);
+        if (filters.sortBy === 'discount') return getDiscount(b) - getDiscount(a);
+        if (filters.sortBy === 'popularity') return (b.clickCount || b.viewCount || 0) - (a.clickCount || a.viewCount || 0);
+        return (b.dealScore || 0) - (a.dealScore || 0);
+      });
 
       setFilteredProducts(result);
     };
@@ -422,6 +442,46 @@ const handleThemeToggle = () => {
 
       <div className={styles.contentWrapper}>
         <div className={styles.filterSidebar}>
+          <div className={styles.quickFilters}>
+            <input
+              type="search"
+              placeholder="Search deals"
+              value={filters.searchTerm}
+              onChange={(event) => handleFilterUpdate({ searchTerm: event.target.value })}
+            />
+            <select value={filters.source} onChange={(event) => handleFilterUpdate({ source: event.target.value })}>
+              <option value="">Amazon + Flipkart</option>
+              <option value="amazon">Amazon</option>
+              <option value="flipkart">Flipkart</option>
+            </select>
+            <select value={filters.minDiscount} onChange={(event) => handleFilterUpdate({ minDiscount: event.target.value })}>
+              <option value="0">Any discount</option>
+              <option value="20">20%+ off</option>
+              <option value="40">40%+ off</option>
+              <option value="50">50%+ off</option>
+            </select>
+            <select value={filters.minRating} onChange={(event) => handleFilterUpdate({ minRating: event.target.value })}>
+              <option value="0">Any rating</option>
+              <option value="3.5">3.5+ stars</option>
+              <option value="4">4+ stars</option>
+            </select>
+            <input
+              type="search"
+              placeholder="Brand"
+              value={filters.brand}
+              onChange={(event) => handleFilterUpdate({ brand: event.target.value })}
+            />
+            <select value={filters.availability} onChange={(event) => handleFilterUpdate({ availability: event.target.value })}>
+              <option value="in-stock">In stock only</option>
+              <option value="all">All availability</option>
+            </select>
+            <select value={filters.sortBy} onChange={(event) => handleFilterUpdate({ sortBy: event.target.value })}>
+              <option value="dealScore">Best ranked</option>
+              <option value="discount">Biggest discount</option>
+              <option value="popularity">Popularity</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
           <ProductFilter 
             categories={categories}
             onFilterUpdate={handleFilterUpdate}
@@ -431,7 +491,9 @@ const handleThemeToggle = () => {
 
         <div className={styles.productsGrid}>
           {filteredProducts.map((product) => (
-            <div key={product._id} className={styles.productCard}>
+            product.activeDealId ? (
+              <DealCard key={product._id} product={product} section="category-page" />
+            ) : <div key={product._id} className={styles.productCard}>
               <div className={styles.productImage}>
                 {/* Heart Button */}
                 <button

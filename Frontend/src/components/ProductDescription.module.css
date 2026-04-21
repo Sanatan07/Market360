@@ -224,6 +224,15 @@
   transition: color 0.3s ease;
 }
 
+.disclosure {
+  background: #fff8db;
+  color: #6b5200;
+  border: 1px solid #f0dc8a;
+  border-radius: 8px;
+  padding: 0.9rem;
+  line-height: 1.5;
+}
+
 .btnBuy {
   display: block;
   width: 100%;
@@ -526,5 +535,55 @@
   
   .btnBuy {
     padding: 0.8rem;
+  }
+}
+
+.priceChart {
+  height: 180px;
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 4px 0;
+}
+
+.priceBarWrap {
+  flex: 1;
+  min-width: 8px;
+  height: 100%;
+  display: flex;
+  align-items: end;
+}
+
+.priceBar {
+  width: 100%;
+  min-height: 10px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #174ea6, #0f8b5f);
+}
+
+.featureList {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.summaryGrid > div {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
   }
 }

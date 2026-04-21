@@ -964,3 +964,15 @@ button:has(svg[class*="FaLightbulb"]):hover {
 .productCard:hover::before {
   opacity: 1;
 }
+
+.quickFilters {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.quickFilters input,
+.quickFilters select {
+  margin-bottom: 0;
+  border-radius: 8px;
+}

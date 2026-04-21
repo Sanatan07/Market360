@@ -57,6 +57,7 @@ app.use(
 // Middleware
 app.use(express.json());
 app.use(requireCsrf);
+app.use('/', require('./routes/seoRoutes'));
 
 // Health check route
 app.get('/', (req, res) => {
@@ -69,7 +70,10 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/deals', require('./routes/dealRoutes'));
 app.use('/api/ingest', require('./routes/ingestionRoutes'));
 app.use('/api/redirect', require('./routes/redirectRoutes'));
+app.use('/api/analytics', require('./routes/analyticsRoutes'));
+app.use('/api/admin-ops', require('./routes/adminOpsRoutes'));
 app.use('/api/wishlist', auth, require('./routes/wishlistRoutes'));
+app.use('/go', require('./routes/redirectRoutes'));
 
 // Handle unknown routes
 app.use((req, res) => {

@@ -3,9 +3,18 @@ const Deal = require('../models/Deal');
 const dealController = {
   getActiveDeals: async (req, res) => {
     try {
-      const { source, category, limit = 50 } = req.query;
+      const { source, category, maxPrice, minDiscount, sort = 'score', limit = 50 } = req.query;
       const query = { status: 'active', 'qualification.isQualified': true };
       if (source) query.source = source;
+      if (minDiscount) query.discountPercent = { $gte: Number(minDiscount) };
+      if (maxPrice) query.currentPrice = { $lte: Number(maxPrice) };
+
+      const sortBy = {
+        newest: { detectedAt: -1 },
+        discount: { discountPercent: -1, dealScore: -1 },
+        popularity: { clickCount: -1, dealScore: -1 },
+        score: { dealScore: -1, detectedAt: -1 }
+      }[sort] || { dealScore: -1, detectedAt: -1 };
 
       const deals = await Deal.find(query)
         .populate({
@@ -13,7 +22,7 @@ const dealController = {
           match: category ? { category } : undefined,
           select: '-__v'
         })
-        .sort({ dealScore: -1, detectedAt: -1 })
+        .sort(sortBy)
         .limit(Math.min(Number(limit) || 50, 100))
         .lean();
 
