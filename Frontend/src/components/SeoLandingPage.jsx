@@ -8,7 +8,7 @@ import styles from './SeoLandingPage.module.css';
 const PAGE_CONFIG = {
   'best-deals-today': {
     title: 'Best Deals Today in India',
-    description: 'Fresh Amazon and Flipkart deals ranked by discount, rating, popularity, and price freshness.',
+    description: 'Fresh Flipkart deals ranked by discount, rating, popularity, and price freshness.',
     filters: { sort: 'score', limit: 48 },
   },
   'price-drop-alerts': {
@@ -21,7 +21,7 @@ const PAGE_CONFIG = {
 const CONTENT_CONFIG = {
   'best-bluetooth-headphones-under-2000': {
     title: 'Best Bluetooth Headphones Under ₹2000',
-    description: 'A live, deal-led shortlist of Bluetooth headphones under ₹2000 from Amazon and Flipkart.',
+    description: 'A live, deal-led shortlist of Bluetooth headphones under ₹2000 from Flipkart.',
     filters: { category: 'audio', maxPrice: 2000, minDiscount: 20 },
     intro: 'These picks are generated from current deal data, then structured for human review before publishing.',
   },
@@ -45,13 +45,13 @@ const routeToConfig = (params, pathname) => {
     if (category === 'under-1000') {
       return {
         title: 'Best Deals Under ₹1000',
-        description: 'Budget Amazon and Flipkart deals under ₹1000.',
+        description: 'Budget Flipkart deals under ₹1000.',
         filters: { maxPrice: 1000, minDiscount: 20 },
       };
     }
     return {
       title: `${category.replace(/-/g, ' ')} deals`,
-      description: `Verified ${category.replace(/-/g, ' ')} deals from Amazon and Flipkart.`,
+      description: `Verified ${category.replace(/-/g, ' ')} deals from Flipkart.`,
       filters: { category, minDiscount: 20 },
     };
   }
@@ -125,7 +125,6 @@ const SeoLandingPage = ({ type }) => {
         <Link to="/best-deals-today">Best deals today</Link>
         <Link to="/deals/electronics">Electronics</Link>
         <Link to="/deals/kitchen-appliances">Kitchen deals</Link>
-        <Link to="/store/amazon">Amazon</Link>
         <Link to="/store/flipkart">Flipkart</Link>
       </nav>
 

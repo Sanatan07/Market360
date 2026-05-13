@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const clickEventSchema = new mongoose.Schema({
   dealId: { type: mongoose.Schema.Types.ObjectId, ref: 'Deal', index: true },
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', index: true },
-  source: { type: String, enum: ['manual', 'amazon', 'flipkart'], index: true },
+  source: { type: String, enum: ['manual', 'flipkart'], index: true },
   category: { type: String, index: true },
   store: { type: String, index: true },
   placement: { type: String, default: 'unknown', index: true },

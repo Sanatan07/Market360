@@ -42,10 +42,6 @@ const estimateCommission = (deal, product) => {
     else if (category === 'beauty-personal-care') rate = 0.05;
     else if (category === 'mobiles-accessories') rate = 0.015;
     else rate = 0.025;
-  } else if (source === 'amazon') {
-    if (category === 'fashion' || category === 'beauty-personal-care') rate = 0.04;
-    else if (category === 'electronics' || category === 'mobiles-accessories') rate = 0.01;
-    else rate = 0.02;
   }
 
   return Number((price * rate).toFixed(2));

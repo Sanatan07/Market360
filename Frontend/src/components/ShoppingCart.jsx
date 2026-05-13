@@ -4,28 +4,6 @@ import { Trash2, Plus, Minus } from 'lucide-react';
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = React.useState([
-    {
-      id: 1,
-      name: "Storin 15.6 Inch Reversible Laptop Sleeve Cover Case For Hp,Lenovo,Dell,Asus,Acer,Sony,Apple Macbook,Assorted",
-      price: 1800.00,
-      quantity: 1,
-      inStock: true,
-      seller: "Storin Electro World",
-      amazonDelivered: true,
-      image: "https://m.media-amazon.com/images/I/31xVkJckbUL._SX300_SY300_QL70_FMwebp_.jpg"
-    },
-    {
-      id: 2,
-      name: "Caresmith Charge Boost Massage Gun | Body Massager | Massager Machine for Pain Relief",
-      price: 1497.00,
-      quantity: 1,
-      inStock: true,
-      seller: "Caresmith",
-      originalPrice: 5000.00,
-      discount: 70,
-      limitedDeal: true,
-      image: "https://m.media-amazon.com/images/I/41hpHbg6SfL._SX300_SY300_QL70_FMwebp_.jpg"
-    }
   ]);
 
   const handleQuantityChange = (id, change) => {
@@ -76,12 +54,7 @@ const ShoppingCart = () => {
                         Sold by {item.seller}
                       </div>
                       
-                      {item.amazonDelivered && (
-                        <div className="small mb-1">
-                          <img src="/https://m.media-amazon.com/images/G/31/easyship-SVDRVS/amazon-delivered-DSVVSR._CB485933315_.png" alt="Amazon Delivered" className="me-1" />
-                          Amazon Delivered
-                        </div>
-                      )}
+
                       
                       {item.limitedDeal && (
                         <div className="mb-2">

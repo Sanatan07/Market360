@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar, FaExternalLinkAlt } from 'react-icons/fa';
 import { createPriceAlert } from '../services/api';
-import { formatINR, getDiscount, needsAmazonDisclaimer, sourceLabel, verifiedAgo } from '../utils/dealFormat';
+import { formatINR, getDiscount, sourceLabel, verifiedAgo } from '../utils/dealFormat';
 import styles from './DealCard.module.css';
 
 const DealCard = ({ product, section = 'deal-card', compact = false }) => {
@@ -34,9 +34,6 @@ const DealCard = ({ product, section = 'deal-card', compact = false }) => {
           <span><FaStar /> {product.rating ? product.rating.toFixed?.(1) || product.rating : 'New'}</span>
           <span>{verifiedAgo(product.priceVerifiedAt || product.lastSyncedAt)}</span>
         </div>
-        {needsAmazonDisclaimer(product) && (
-          <p className={styles.disclaimer}>Price and availability may change on Amazon.</p>
-        )}
         <a
           href={dealUrl}
           target="_blank"

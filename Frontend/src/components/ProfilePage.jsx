@@ -535,7 +535,6 @@ const ProfilePage = () => {
                 <label>Source</label>
                 <select value={alertForm.source} onChange={(e) => setAlertForm({ ...alertForm, source: e.target.value })}>
                   <option value="">Any</option>
-                  <option value="amazon">Amazon</option>
                   <option value="flipkart">Flipkart</option>
                 </select>
               </div>

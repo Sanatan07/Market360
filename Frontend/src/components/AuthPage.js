@@ -31,12 +31,7 @@ const AuthPage = () => {
           setError('Passwords do not match');
           return;
         }
-        console.log('Signup data being sent:', {
-          email: formData.email,
-          password: formData.password,
-          username: formData.username,
-          confirmPassword: formData.confirmPassword
-        });
+        // Signup data removed from console for security
         const response = await signUp(formData.email, formData.password, formData.username, formData.confirmPassword);
         console.log('Signup response:', response);
         login(response.user); 

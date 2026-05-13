@@ -419,8 +419,7 @@ useEffect(() => {
               onChange={(event) => handleFilterUpdate({ searchTerm: event.target.value })}
             />
             <select value={filters.source} onChange={(event) => handleFilterUpdate({ source: event.target.value })}>
-              <option value="">Amazon + Flipkart</option>
-              <option value="amazon">Amazon</option>
+              <option value="">Flipkart</option>
               <option value="flipkart">Flipkart</option>
             </select>
             <select value={filters.minDiscount} onChange={(event) => handleFilterUpdate({ minDiscount: event.target.value })}>

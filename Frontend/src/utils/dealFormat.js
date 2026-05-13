@@ -21,13 +21,7 @@ export const verifiedAgo = (dateValue) => {
   if (hours < 24) return `verified ${hours} hr ago`;
   return `verified ${Math.round(hours / 24)} d ago`;
 };
-
-export const needsAmazonDisclaimer = (product) => (
-  product?.source === 'amazon' || product?.complianceFlags?.disclaimerRequired
-);
-
 export const sourceLabel = (source) => {
-  if (source === 'amazon') return 'Amazon';
   if (source === 'flipkart') return 'Flipkart';
   return 'Market360';
 };

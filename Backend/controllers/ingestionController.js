@@ -1,11 +1,10 @@
 const Product = require('../models/Product');
 const SourceSyncLog = require('../models/SourceSyncLog');
-const { mapAmazonItem } = require('../services/connectors/amazon.connector');
+
 const { mapFlipkartItem } = require('../services/connectors/flipkart.connector');
 const { upsertActiveDealForProduct } = require('../services/deals/dealEngine');
 
 const mapperBySource = {
-  amazon: mapAmazonItem,
   flipkart: mapFlipkartItem
 };
 
@@ -18,7 +17,7 @@ const ingestionController = {
       const mapper = mapperBySource[source];
 
       if (!mapper) {
-        return res.status(400).json({ message: 'Unsupported source. Use amazon or flipkart.' });
+        return res.status(400).json({ message: 'Unsupported source. Use flipkart.' });
       }
 
       if (!Array.isArray(products) || products.length === 0) {

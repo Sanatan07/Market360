@@ -5,7 +5,7 @@ Market360 is an affiliate-led deals discovery platform for Indian shoppers. It i
 ## What It Does
 
 - Ingests deal/product data from marketplace source adapters.
-- Normalizes Amazon, Flipkart, and manual deals into one internal product shape.
+- Normalizes Flipkart and manual deals into one internal product shape.
 - Separates persistent products from time-sensitive deal events.
 - Scores deals by discount, rating, review volume, commission potential, click trend, and freshness.
 - Hides stale, duplicate, low-quality, out-of-stock, or suspicious deals.
@@ -69,7 +69,6 @@ Backend/services/connectors/
 
 Current adapters:
 
-- Amazon connector
 - Flipkart connector
 
 They return normalized internal products and keep source-specific rules contained.
@@ -170,7 +169,6 @@ SEO/content routes:
 - `/deals/electronics`
 - `/deals/kitchen-appliances`
 - `/deals/under-1000`
-- `/store/amazon`
 - `/store/flipkart`
 - `/best-deals-today`
 - `/price-drop-alerts`
@@ -289,7 +287,6 @@ docs/affiliate-compliance.md
 
 Important principles:
 
-- Do not build Amazon as a raw scraper-first pipeline.
 - Use official affiliate/API/feed content where allowed.
 - Keep price and availability freshness visible.
 - Use affiliate disclosure text.
@@ -298,7 +295,7 @@ Important principles:
 
 ## Current Limitations
 
-- Live Amazon and Flipkart API calls require real affiliate credentials.
+- Live Flipkart API calls require real affiliate credentials.
 - Daily email generation currently creates pending alert events; an actual email provider is not wired yet.
 - Scheduler is disabled by default.
 - SEO is implemented in the current React/Express architecture; server-side rendering or Next.js migration can improve crawlability later.

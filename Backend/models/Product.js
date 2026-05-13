@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const sourceEnum = ['manual', 'amazon', 'flipkart'];
+const sourceEnum = ['manual', 'flipkart'];
 
 const productSchema = new mongoose.Schema({
 

@@ -10,7 +10,6 @@ const DEFAULT_RULES = {
   maximumDiscountPercent: 90,
   maximumOriginalToCurrentRatio: 8,
   maximumStaleHoursBySource: {
-    amazon: 24,
     flipkart: 48,
     manual: 168
   },
@@ -52,13 +51,6 @@ const estimateCommissionPotential = (product, explicitWeight) => {
     if (category === 'mobiles-accessories') return 20;
     return 40;
   }
-
-  if (source === 'amazon') {
-    if (category === 'fashion' || category === 'beauty-personal-care') return 55;
-    if (category === 'mobiles-accessories' || category === 'electronics') return 25;
-    return 35;
-  }
-
   return 25;
 };
 

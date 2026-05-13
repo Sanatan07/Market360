@@ -10,7 +10,6 @@ const staticRoutes = [
   '/deals/electronics',
   '/deals/kitchen-appliances',
   '/deals/under-1000',
-  '/store/amazon',
   '/store/flipkart',
   '/content/best-bluetooth-headphones-under-2000',
   '/content/best-air-fryers-on-discount-this-week',

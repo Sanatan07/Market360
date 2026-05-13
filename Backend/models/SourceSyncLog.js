@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const sourceSyncLogSchema = new mongoose.Schema({
   source: {
     type: String,
-    enum: ['amazon', 'flipkart', 'system'],
+    enum: ['flipkart', 'system'],
     required: true,
     index: true
   },

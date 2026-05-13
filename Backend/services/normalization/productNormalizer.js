@@ -13,7 +13,6 @@ const CANONICAL_CATEGORIES = [
 ];
 
 const STORE_BY_SOURCE = {
-  amazon: 'Amazon',
   flipkart: 'Flipkart',
   manual: 'Market360'
 };
@@ -43,7 +42,6 @@ const cleanText = (value = '') => String(value)
   .trim();
 
 const cleanupTitle = (value = '') => cleanText(value)
-  .replace(/\s+[-|]\s+Amazon\.in$/i, '')
   .replace(/\s+[-|]\s+Flipkart\.com$/i, '');
 
 const generateSlug = (value = '') => cleanupTitle(value)
@@ -167,43 +165,12 @@ const normalizeProduct = (sourceProduct) => {
     store: sourceProduct.store || STORE_BY_SOURCE[source] || source,
     lastSyncedAt: new Date(),
     priceVerifiedAt: new Date(),
-    contentExpiresAt: source === 'amazon' ? new Date(Date.now() + 24 * 60 * 60 * 1000) : undefined,
     complianceFlags: {
       priceFromApi: source !== 'manual',
       needsRefresh: false,
-      disclaimerRequired: source === 'amazon'
     },
     dealScore: Math.min(100, Math.max(0, discountPercent))
   };
-};
-
-const mapAmazonToNormalizedProduct = (item) => {
-  const asin = item.asin || item.ASIN;
-  const listing = item.OffersV2?.Listings?.[0] || item.Offers?.Listings?.[0] || {};
-  const summary = item.OffersV2?.Summaries?.[0] || item.Offers?.Summaries?.[0] || {};
-  const imageUrl = item.Images?.Primary?.Large?.URL || item.Images?.Primary?.Medium?.URL;
-  const features = item.features || item.ItemInfo?.Features?.DisplayValues || [];
-
-  return normalizeProduct({
-    source: 'amazon',
-    sourceProductId: asin,
-    title: item.title || item.ItemInfo?.Title?.DisplayValue,
-    brand: item.brand || item.ItemInfo?.ByLineInfo?.Brand?.DisplayValue,
-    category: item.category || item.BrowseNodeInfo?.BrowseNodes?.[0]?.DisplayName,
-    images: item.images || (imageUrl ? [imageUrl] : []),
-    currentPrice: item.currentPrice || listing.Price,
-    originalPrice: item.originalPrice || summary.HighestPrice || listing.SavingBasis || listing.Price,
-    currency: item.currency || listing.Price?.Currency || 'INR',
-    rating: item.rating,
-    reviewCount: item.reviewCount,
-    inStock: item.inStock ?? listing.Availability?.Type !== 'OutOfStock',
-    affiliateUrl: item.affiliateUrl || item.DetailPageURL,
-    canonicalSourceUrl: item.canonicalSourceUrl || (asin ? `https://www.amazon.in/dp/${asin}` : undefined),
-    description: item.description || features.join(' '),
-    features,
-    tags: item.tags,
-    store: 'Amazon'
-  });
 };
 
 const getFlipkartBaseInfo = (item) => item.productBaseInfoV1 || item.productBaseInfo || item;
@@ -239,7 +206,6 @@ module.exports = {
   calculateDiscountPercent,
   cleanupTitle,
   generateSlug,
-  mapAmazonToNormalizedProduct,
   mapFlipkartToNormalizedProduct,
   normalizeBrand,
   normalizeCategory,

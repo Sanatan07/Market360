@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { FaShare } from "react-icons/fa";
-import { formatINR, getDiscount, needsAmazonDisclaimer, verifiedAgo } from '../utils/dealFormat';
+import { formatINR, getDiscount, verifiedAgo } from '../utils/dealFormat';
 
 const ProductDescription = ({ currentUser }) => {
   const { id } = useParams();
@@ -246,7 +246,6 @@ const ProductDescription = ({ currentUser }) => {
             </div>
             <p className={styles.disclosure}>
               Market360 may earn a commission when you buy through affiliate links. Price and availability can change on the merchant site.
-              {needsAmazonDisclaimer(product) ? ' As an Amazon Associate, Market360 earns from qualifying purchases.' : ''}
             </p>
 
             {product.dealUrl && (

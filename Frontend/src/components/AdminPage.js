@@ -119,10 +119,6 @@ const AdminPage = () => {
       </div>
       <div className={styles.statusGrid}>
         <div className={styles.statusCard}>
-          <strong>Last Amazon success</strong>
-          <span>{formatDate(overview?.lastSuccessfulImport?.amazon?.finishedAt)}</span>
-        </div>
-        <div className={styles.statusCard}>
           <strong>Last Flipkart success</strong>
           <span>{formatDate(overview?.lastSuccessfulImport?.flipkart?.finishedAt)}</span>
         </div>

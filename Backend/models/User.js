@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   personalization: {
     dailyBestDealsEmail: { type: Boolean, default: false },
     defaultDiscountThreshold: { type: Number, default: 40 },
-    preferredSources: [{ type: String, enum: ['amazon', 'flipkart'] }],
+    preferredSources: [{ type: String, enum: ['flipkart'] }],
     maxPrice: Number
   },
   avatar: {

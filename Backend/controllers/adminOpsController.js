@@ -14,7 +14,6 @@ const adminOpsController = {
     try {
       const [
         syncBySource,
-        lastAmazonSuccess,
         lastFlipkartSuccess,
         failedItems,
         staleDeals,
@@ -26,7 +25,6 @@ const adminOpsController = {
           { $sort: { startedAt: -1 } },
           { $group: { _id: '$source', lastRun: { $first: '$$ROOT' }, runs: { $sum: 1 }, failedRuns: { $sum: { $cond: [{ $eq: ['$status', 'failed'] }, 1, 0] } } } }
         ]),
-        getLatestSuccessfulSync('amazon'),
         getLatestSuccessfulSync('flipkart'),
         SourceSyncLog.find({ status: { $in: ['failed', 'partial'] } }).sort({ startedAt: -1 }).limit(20).lean(),
         Deal.find({ status: 'expired' }).populate('productId').sort({ updatedAt: -1 }).limit(25).lean(),
@@ -42,7 +40,6 @@ const adminOpsController = {
       res.json({
         syncBySource,
         lastSuccessfulImport: {
-          amazon: lastAmazonSuccess,
           flipkart: lastFlipkartSuccess
         },
         failedItems,

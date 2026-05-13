@@ -9,7 +9,7 @@ const dealSchema = new mongoose.Schema({
   },
   source: {
     type: String,
-    enum: ['manual', 'amazon', 'flipkart'],
+    enum: ['manual', 'flipkart'],
     required: true,
     index: true
   },

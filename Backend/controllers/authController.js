@@ -48,6 +48,7 @@ const authController = {
 
       res.status(201).json({ user: { id: user._id, email: user.email, username: user.username } });
     } catch (error) {
+      console.error('SignUp Error:', error);
       res.status(500).json({ message: 'Error creating user' });
     }
   },
@@ -69,6 +70,7 @@ const authController = {
 
       res.json({ user: { id: user._id, email: user.email, username: user.username } });
     } catch (error) {
+      console.error('SignIn Error:', error);
       res.status(500).json({ message: 'Error signing in' });
     }
   },

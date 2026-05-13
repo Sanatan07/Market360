@@ -20,7 +20,7 @@ const priceAlertSchema = new mongoose.Schema({
   },
   source: {
     type: String,
-    enum: ['amazon', 'flipkart', 'manual']
+    enum: ['flipkart', 'manual']
   },
   targetPrice: Number,
   discountThreshold: {

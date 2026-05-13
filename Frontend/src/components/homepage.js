@@ -73,7 +73,7 @@ const Homepage = () => {
         <div className={styles.heroInner}>
           <p className={styles.eyebrow}>Market360 Deals</p>
           <h1>Verified affiliate deals for Indian shoppers</h1>
-          <p className={styles.heroCopy}>Amazon and Flipkart offers ranked by discount, quality, freshness, and shopper interest.</p>
+          <p className={styles.heroCopy}>Flipkart offers ranked by discount, quality, freshness, and shopper interest.</p>
           <form className={styles.searchBar} onSubmit={handleSearch}>
             <FaSearch />
             <input

@@ -2,7 +2,7 @@ const Deal = require('../../models/Deal');
 const Product = require('../../models/Product');
 const SourceSyncLog = require('../../models/SourceSyncLog');
 const { evaluatePriceAlerts, generateDailyBestDealAlerts } = require('../alerts/alertService');
-const { amazon, flipkart } = require('../connectors');
+const { flipkart } = require('../connectors');
 const { upsertActiveDealForProduct } = require('../deals/dealEngine');
 
 const TARGET_CATEGORIES = (process.env.SYNC_TARGET_CATEGORIES || [
@@ -19,7 +19,7 @@ const TARGET_CATEGORIES = (process.env.SYNC_TARGET_CATEGORIES || [
   .map((category) => category.trim())
   .filter(Boolean);
 
-const SOURCES = (process.env.SYNC_SOURCES || 'flipkart,amazon')
+const SOURCES = (process.env.SYNC_SOURCES || 'flipkart')
   .split(',')
   .map((source) => source.trim())
   .filter(Boolean);
@@ -100,9 +100,7 @@ const refreshTopActiveDeals = async (limit = 500) => {
         if (!product) continue;
 
         let patch = null;
-        if (product.source === 'amazon') {
-          patch = await amazon.refreshPriceAvailability(product.sourceProductId);
-        } else if (product.source === 'flipkart') {
+        if (product.source === 'flipkart') {
           const feed = await flipkart.getDeltaFeed(product.category, { inStock: true });
           patch = feed.products.find((item) => item.sourceProductId === product.sourceProductId);
         }
@@ -262,23 +260,6 @@ const runDailyFullSync = async () => {
           failedCount: result.failedCount,
           nextCursor: feed.nextUrl,
           metadata: { ...(log.metadata || {}), version: feed.version }
-        }));
-      } catch (error) {
-        logs.push(await finishLog(log, 'failed', { errorMessage: error.message }));
-      }
-    }
-
-    if (SOURCES.includes('amazon')) {
-      const log = await createLog('full-feed', { source: 'amazon', category, metadata: { job: 'runDailyFullSync' } });
-      try {
-        const products = await amazon.searchProductsByCategory({ category, limit: 10 });
-        const result = await upsertNormalizedProducts(products, log);
-        logs.push(await finishLog(log, result.failedCount ? 'partial' : 'success', {
-          requestedCount: products.length,
-          insertedCount: result.insertedCount,
-          updatedCount: result.updatedCount,
-          skippedCount: result.skippedCount,
-          failedCount: result.failedCount
         }));
       } catch (error) {
         logs.push(await finishLog(log, 'failed', { errorMessage: error.message }));
