@@ -3,8 +3,39 @@ const Deal = require('../../models/Deal');
 const PriceAlert = require('../../models/PriceAlert');
 const Product = require('../../models/Product');
 const User = require('../../models/User');
+const { sendEmail } = require('./mailer');
 
 const buildProductMessage = (product) => `${product.title} is now ${product.discountPercent}% off at ${product.store}.`;
+
+const buildEmailHtml = (title, message, product = null) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  return `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+      <h2 style="color: #2196f3;">${title}</h2>
+      <p>${message}</p>
+      ${product ? `
+        <div style="display: flex; align-items: center; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 20px;">
+          ${product.images?.[0] ? `<img src="${product.images[0].url}" style="width: 100px; height: 100px; object-fit: contain; margin-right: 20px;" />` : ''}
+          <div>
+            <h4 style="margin: 0;">${product.title}</h4>
+            <p style="margin: 5px 0;">
+              <span style="font-size: 1.2em; font-weight: bold; color: #e60023;">$${product.salePrice}</span>
+              <span style="text-decoration: line-through; color: #888; margin-left: 10px;">$${product.listPrice}</span>
+              <span style="color: #4caf50; margin-left: 10px;">${product.discountPercent}% OFF</span>
+            </p>
+            <a href="${frontendUrl}/products/${product._id}" style="display: inline-block; background: #2196f3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">View Deal</a>
+          </div>
+        </div>
+      ` : ''}
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;" />
+      <p style="font-size: 0.8em; color: #888; text-align: center;">
+        You received this because you have alerts set up on Market360.
+        <br />
+        <a href="${frontendUrl}/profile">Manage your preferences</a>
+      </p>
+    </div>
+  `;
+};
 
 const findMatchingProductsForAlert = async (alert) => {
   const query = {
@@ -38,10 +69,15 @@ const evaluatePriceAlerts = async () => {
       });
       if (alreadySent) continue;
 
+      // Determine if user wants email for this
+      const user = await User.findById(alert.userId).select('personalization email');
+      const channel = user?.personalization?.dailyBestDealsEmail ? 'email' : 'in-app';
+
       const event = await AlertEvent.create({
         userId: alert.userId,
         alertId: alert._id,
         productId: product._id,
+        channel: channel,
         type: alert.productId ? 'price-drop' : 'discount-threshold',
         title: alert.productId ? 'Price drop alert' : `Deal alert: ${alert.discountThreshold}%+ off`,
         message: buildProductMessage(product),
@@ -105,8 +141,51 @@ const generateDailyBestDealAlerts = async () => {
   return events;
 };
 
+const processPendingEmailAlerts = async () => {
+  const events = await AlertEvent.find({
+    channel: 'email',
+    status: 'pending'
+  }).populate('userId').populate('productId').limit(50);
+
+  const results = { sent: 0, failed: 0 };
+
+  for (const event of events) {
+    try {
+      if (!event.userId?.email) {
+        event.status = 'failed';
+        event.metadata.error = 'User has no email address';
+        await event.save();
+        results.failed++;
+        continue;
+      }
+
+      await sendEmail({
+        to: event.userId.email,
+        subject: event.title,
+        text: event.message,
+        html: buildEmailHtml(event.title, event.message, event.productId)
+      });
+
+      event.status = 'sent';
+      event.sentAt = new Date();
+      await event.save();
+      results.sent++;
+    } catch (error) {
+      console.error(`Failed to send email for event ${event._id}:`, error);
+      event.status = 'failed';
+      event.metadata.error = error.message;
+      await event.save();
+      results.failed++;
+    }
+  }
+
+  return results;
+};
+
 module.exports = {
   evaluatePriceAlerts,
   findMatchingProductsForAlert,
-  generateDailyBestDealAlerts
+  generateDailyBestDealAlerts,
+  processPendingEmailAlerts
 };
+

@@ -32,6 +32,7 @@ const startScheduler = () => {
   schedule('17 * * * *', 'hourly:validate-homepage-items', workflows.validateHomepageItems);
   schedule('27 * * * *', 'hourly:expire-stale-deals', workflows.expireStaleDeals);
   schedule('37 * * * *', 'hourly:evaluate-user-price-alerts', workflows.evaluateUserPriceAlerts);
+  schedule('*/5 * * * *', 'periodic:process-pending-emails', workflows.processEmails);
 
   schedule('13 */6 * * *', 'six-hour:category-delta-sync', async () => {
     for (const category of workflows.TARGET_CATEGORIES) {

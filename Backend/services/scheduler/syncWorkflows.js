@@ -1,7 +1,7 @@
 const Deal = require('../../models/Deal');
 const Product = require('../../models/Product');
 const SourceSyncLog = require('../../models/SourceSyncLog');
-const { evaluatePriceAlerts, generateDailyBestDealAlerts } = require('../alerts/alertService');
+const { evaluatePriceAlerts, generateDailyBestDealAlerts, processPendingEmailAlerts } = require('../alerts/alertService');
 const { flipkart } = require('../connectors');
 const { upsertActiveDealForProduct } = require('../deals/dealEngine');
 
@@ -396,6 +396,21 @@ const computeEvergreenProducts = async () => {
   }
 };
 
+const processEmails = async () => {
+  const log = await createLog('email-processing', { metadata: { job: 'processEmails' } });
+  try {
+    const results = await processPendingEmailAlerts();
+    return finishLog(log, 'success', {
+      sentCount: results.sent,
+      failedCount: results.failed,
+      metadata: { results }
+    });
+  } catch (error) {
+    return finishLog(log, 'failed', { errorMessage: error.message });
+  }
+};
+
+
 module.exports = {
   TARGET_CATEGORIES,
   archiveExpiredDeals,
@@ -404,6 +419,7 @@ module.exports = {
   generateTodaysBestDeals,
   evaluateUserPriceAlerts,
   generateDailyBestDealsEmails,
+  processEmails,
   rebuildDerivedStatistics,
   rebuildRankings,
   refreshTopActiveDeals,
