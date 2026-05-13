@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext'; // Make sure to import useAuth
 import { BsHeartFill } from 'react-icons/bs';
 import { RiAdminFill } from "react-icons/ri";
 // Remove currentUser and handleLogout from props since we'll get them from useAuth
-const Navbar = ({ handlePostDeal }) => {
+const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -172,15 +172,6 @@ const handleSearchSubmit = () => {
           </div>
 
           <div className={styles.actionButtons}>
-      <button 
-        onClick={handlePostDeal}
-        className={styles.actionButton}
-        type="button"
-      >
-        <IoAddCircle className={styles.icon} style={{color: '#2196f3'}} />
-        <span>Post a Deal</span>
-      </button>
-
       <Link to="/Wishlist" className={styles.actionButton}>
               <BsHeartFill className={styles.icon} style={{ color: '#e60023' }} />
               <span>Wishlist</span>

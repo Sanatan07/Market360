@@ -25,7 +25,6 @@ const Layout = ({ children }) => {
   return (
     <>
       {!isHomePage && <Navbar 
-        handlePostDeal={() => {}} // We'll handle this via props
         isAuthenticated={!!currentUser}
         currentUser={currentUser || {}}
       />}
@@ -38,7 +37,6 @@ const Layout = ({ children }) => {
 };
 
 const AppRoutes = () => {
-  const [showProductModal, setShowProductModal] = useState(false);
   const { currentUser } = useAuth();
 
   return (
@@ -54,10 +52,7 @@ const AppRoutes = () => {
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/products" element={
-                <ProductPage 
-                  showModal={showProductModal} 
-                  setShowModal={setShowProductModal} 
-                />
+                <ProductPage />
               } />
               <Route path="/products/:id" element={
                 <ProductDescription currentUser={currentUser} />
