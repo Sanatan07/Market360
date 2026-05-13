@@ -26,15 +26,23 @@ const personalizationController = {
   },
 
   createAlert: async (req, res) => {
-    const alert = await PriceAlert.create({
-      userId: req.user._id,
-      productId: req.body.productId,
-      category: req.body.category,
-      source: req.body.source,
-      targetPrice: req.body.targetPrice,
-      discountThreshold: req.body.discountThreshold || 40
-    });
-    res.status(201).json(alert);
+    try {
+      const alert = await PriceAlert.create({
+        userId: req.user._id,
+        productId: req.body.productId,
+        category: req.body.category,
+        source: req.body.source,
+        targetPrice: req.body.targetPrice,
+        discountThreshold: req.body.discountThreshold || 40
+      });
+      res.status(201).json(alert);
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        return res.status(400).json({ message: error.message });
+      }
+      console.error('Create Alert Error:', error);
+      res.status(500).json({ message: 'Error creating alert' });
+    }
   },
 
   getAlerts: async (req, res) => {

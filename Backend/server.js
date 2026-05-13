@@ -73,6 +73,7 @@ app.use('/api/redirect', require('./routes/redirectRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
 app.use('/api/admin-ops', require('./routes/adminOpsRoutes'));
 app.use('/api/personalization', require('./routes/personalizationRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/wishlist', auth, require('./routes/wishlistRoutes'));
 app.use('/go', require('./routes/redirectRoutes'));
 

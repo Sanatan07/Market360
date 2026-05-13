@@ -187,12 +187,22 @@ const ProfilePage = () => {
 
   const handleCreateAlert = async (event) => {
     event.preventDefault();
-    await createPriceAlert({
-      category: alertForm.category,
-      source: alertForm.source || undefined,
-      discountThreshold: Number(alertForm.discountThreshold)
-    });
-    await fetchPersonalization();
+    const threshold = Number(alertForm.discountThreshold);
+    if (threshold < 1 || threshold > 100) {
+      alert('Please enter a discount threshold between 1 and 100');
+      return;
+    }
+    try {
+      await createPriceAlert({
+        category: alertForm.category,
+        source: alertForm.source || undefined,
+        discountThreshold: threshold
+      });
+      await fetchPersonalization();
+    } catch (err) {
+      console.error('Failed to create alert:', err);
+      alert(err.response?.data?.message || 'Failed to create alert');
+    }
   };
 
   return (
@@ -540,7 +550,18 @@ const ProfilePage = () => {
               </div>
               <div className={styles.inputGroup}>
                 <label>Discount threshold</label>
-                <input type="number" value={alertForm.discountThreshold} onChange={(e) => setAlertForm({ ...alertForm, discountThreshold: e.target.value })} />
+                <input 
+                  type="number" 
+                  value={alertForm.discountThreshold} 
+                  onChange={(e) => setAlertForm({ ...alertForm, discountThreshold: e.target.value })} 
+                  min="1"
+                  max="100"
+                />
+                {(alertForm.discountThreshold > 100 || alertForm.discountThreshold < 1) && (
+                  <span style={{ color: '#e60023', fontSize: '0.8rem', marginTop: '4px' }}>
+                    Please enter between 1-100
+                  </span>
+                )}
               </div>
               <button className={styles.saveButton} type="submit">Create Alert</button>
             </form>
